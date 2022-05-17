@@ -1,0 +1,41 @@
+DASHBOARD MENU
+> Admin
+    > Services - role form
+    > Staff - user form
+    > Schedule - schedule form
+    > Barangay 
+    > Barangay Staff
+
+> Barangay
+    > Schedule (Select date and time)
+    > Select Services
+    > Client Details
+
+> Client
+> Staff
+
+
+FORMS
+User form
+    > email
+    > full name
+    > role
+    > contact
+    > type (staff or not)
+
+Services form
+    > name
+    > description
+
+Roles
+    > name
+
+Schedule
+    > client name
+    > date
+    > time
+
+Barangay 
+    > name
+    > address
+
