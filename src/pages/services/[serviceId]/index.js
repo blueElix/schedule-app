@@ -10,16 +10,14 @@ const ServicesDetails = ({ service }) => {
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <Link href="/">
-          <StyleLink underline="hover" color="inherit">
-            Home
-          </StyleLink>
-        </Link>
-        <Link href="/services">
-          <StyleLink underline="hover" color="inherit">
-            Services
-          </StyleLink>
-        </Link>
+        <StyleLink underline="hover" color="inherit">
+          <Link href="/">Home</Link>
+        </StyleLink>
+
+        <StyleLink underline="hover" color="inherit">
+          <Link href="/services">Services</Link>
+        </StyleLink>
+
         <StyleLink underline="hover" color="text.primary" aria-current="page">
           Details
         </StyleLink>

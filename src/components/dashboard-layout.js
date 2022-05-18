@@ -1,9 +1,16 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
+import Router from "next/router";
+import NProgress from "nprogress";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { DashboardNavbar } from "./dashboard-navbar";
 import { DashboardSidebar } from "./dashboard-sidebar";
+import "nprogress/nprogress.css";
+
+Router.onRouteChangeStart = () => NProgress.start();
+Router.onRouteChangeComplete = () => NProgress.done();
+Router.onRouteChangeError = () => NProgress.done();
 
 const DashboardLayoutRoot = styled("div")(({ theme }) => ({
   display: "flex",
@@ -51,11 +58,9 @@ export const DashboardLayout = (props) => {
           </Box>
         </Box>
       </DashboardLayoutRoot>
-      {user && (
-        <>
-          <DashboardNavbar onSidebarOpen={() => setSidebarOpen(true)} />
-          <DashboardSidebar onClose={() => setSidebarOpen(false)} open={isSidebarOpen} />
-        </>
+      {user && <DashboardNavbar user={user} onSidebarOpen={() => setSidebarOpen(true)} />}
+      {user && user.role !== "user" && (
+        <DashboardSidebar onClose={() => setSidebarOpen(false)} open={isSidebarOpen} />
       )}
     </>
   );

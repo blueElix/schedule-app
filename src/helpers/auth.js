@@ -2,7 +2,7 @@ import cookie from "js-cookie";
 import Router from "next/router";
 // import axios from "axios";
 // import { API } from "../config";
-import { customers } from "../__mocks__/customers";
+import { users } from "../__mocks__/users";
 
 // set in cookie
 export const setCookie = (key, value) => {
@@ -97,7 +97,7 @@ export const updateUser = (user, cb) => {
 export const withAdmin = (gssp) => {
   return async (ctx) => {
     const token = getCookie("token", ctx.req);
-    let user = customers[0];
+    let user = users[0];
 
     // if (token) {
     //   try {

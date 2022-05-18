@@ -15,17 +15,19 @@ import {
   MenuItem,
   InputLabel,
 } from "@mui/material";
-
 import { useFormik } from "formik";
+
 import * as Yup from "yup";
 import Link from "next/link";
 import InputMask from "react-input-mask";
 
-import { DashboardLayout } from "../../components/dashboard-layout";
-import { withAdmin } from "../../helpers/auth";
+import { DashboardLayout } from "../../../components/dashboard-layout";
+import { withAdmin } from "../../../helpers/auth";
+import { users } from "src/__mocks__/users";
 import { services } from "src/__mocks__/services";
+import { useEffect } from "react";
 
-const CreateStaffs = () => {
+const EditStaffs = ({ staff }) => {
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -47,9 +49,19 @@ const CreateStaffs = () => {
     onSubmit: () => {},
   });
 
+  useEffect(() => {
+    if (staff) {
+      formik.setFieldValue("name", staff.name);
+      formik.setFieldValue("contact", staff.contact);
+      formik.setFieldValue("email", staff.email);
+      formik.setFieldValue("type", staff.type);
+      formik.setFieldValue("role", staff.role);
+    }
+  }, []);
+
   const renderForm = () => {
     return (
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} style={{ marginTop: "10px" }}>
         <TextField
           error={Boolean(formik.touched.name && formik.errors.name)}
           fullWidth
@@ -128,10 +140,9 @@ const CreateStaffs = () => {
       </form>
     );
   };
-
   return (
     <Container>
-      <h1>Create Staffs</h1>
+      <h1>Edit Staffs</h1>
       <Breadcrumbs aria-label="breadcrumb">
         <Link href="/">
           <StyleLink underline="hover" color="inherit">
@@ -144,7 +155,7 @@ const CreateStaffs = () => {
           </StyleLink>
         </Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
-          Create Staffs
+          Edit Staffs
         </StyleLink>
       </Breadcrumbs>
       {renderForm()}
@@ -152,14 +163,17 @@ const CreateStaffs = () => {
   );
 };
 
-CreateStaffs.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+EditStaffs.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
+  const _staff = users.find(({ id }) => id == ctx.query.staffId);
   return {
-    props: {},
+    props: {
+      staff: _staff,
+    },
   };
 };
 
 export const getServerSideProps = withAdmin(getProps);
 
-export default CreateStaffs;
+export default EditStaffs;

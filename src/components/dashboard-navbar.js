@@ -1,11 +1,9 @@
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
-import { AppBar, Avatar, Badge, Box, IconButton, Toolbar, Tooltip } from "@mui/material";
+import { AppBar, Avatar, Box, IconButton, Toolbar, Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
-import { Bell as BellIcon } from "../icons/bell";
 import { UserCircle as UserCircleIcon } from "../icons/user-circle";
-import { Users as UsersIcon } from "../icons/users";
+import { logout } from "src/helpers/auth";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -13,7 +11,7 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 }));
 
 export const DashboardNavbar = (props) => {
-  const { onSidebarOpen, ...other } = props;
+  const { onSidebarOpen, user, ...other } = props;
 
   return (
     <>
@@ -36,18 +34,25 @@ export const DashboardNavbar = (props) => {
             px: 2,
           }}
         >
-          <IconButton
-            onClick={onSidebarOpen}
-            sx={{
-              display: {
-                xs: "inline-flex",
-                lg: "none",
-              },
-            }}
-          >
-            <MenuIcon fontSize="small" />
-          </IconButton>
+          {user.role !== "user" && (
+            <IconButton
+              onClick={onSidebarOpen}
+              sx={{
+                display: {
+                  xs: "inline-flex",
+                  lg: "none",
+                },
+              }}
+            >
+              <MenuIcon fontSize="small" />
+            </IconButton>
+          )}
+
           <Box sx={{ flexGrow: 1 }} />
+          <Button variant="text" onClick={logout}>
+            Logout
+          </Button>
+
           <Avatar
             sx={{
               height: 40,

@@ -1,34 +1,26 @@
 import { Container, Breadcrumbs, Link as StyleLink, Box, Button, TextField } from "@mui/material";
+
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 
-import { DashboardLayout } from "../../../components/dashboard-layout";
-import { withAdmin } from "../../../helpers/auth";
-import { services } from "src/__mocks__/services";
-import { useEffect } from "react";
+import { DashboardLayout } from "../../components/dashboard-layout";
+import { withAdmin } from "../../helpers/auth";
 
-const EditServices = ({ service }) => {
+const CreateBarangays = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      description: "",
+      address: "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Services name is required."),
-      description: Yup.string(),
+      name: Yup.string().required("Barangay name is required."),
+      address: Yup.string(),
     }),
-    onSubmit: () => {
-      alert();
+    onSubmit: (values) => {
+      console.log(values);
     },
   });
-
-  useEffect(() => {
-    if (service) {
-      formik.setFieldValue("name", service.name);
-      formik.setFieldValue("description", service.description);
-    }
-  }, []);
 
   const renderForm = () => {
     return (
@@ -37,7 +29,7 @@ const EditServices = ({ service }) => {
           error={Boolean(formik.touched.name && formik.errors.name)}
           fullWidth
           helperText={formik.touched.name && formik.errors.name}
-          label="Services Name"
+          label="Barangay Name"
           margin="normal"
           name="name"
           onBlur={formik.handleBlur}
@@ -46,24 +38,24 @@ const EditServices = ({ service }) => {
           value={formik.values.name}
           variant="outlined"
         />
+
         <TextField
-          error={Boolean(formik.touched.description && formik.errors.description)}
+          error={Boolean(formik.touched.address && formik.errors.address)}
           fullWidth
-          helperText={formik.touched.description && formik.errors.description}
-          label="Services Description"
+          helperText={formik.touched.address && formik.errors.address}
+          label="Barangay Address"
           margin="normal"
-          name="description"
+          name="address"
           onBlur={formik.handleBlur}
           onChange={formik.handleChange}
           type="text"
-          value={formik.values.description}
+          value={formik.values.address}
           variant="outlined"
-          multiline
-          rows={4}
         />
+
         <Box sx={{ py: 2 }} textAlign="right">
           <Button color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
-            {formik.isSubmitting ? "Submitting" : "Submit"}
+            Submit
           </Button>
         </Box>
       </form>
@@ -72,20 +64,20 @@ const EditServices = ({ service }) => {
 
   return (
     <Container>
-      <h1>Edit Services</h1>
+      <h1>Create Barangay</h1>
       <Breadcrumbs aria-label="breadcrumb">
         <Link href="/">
           <StyleLink underline="hover" color="inherit">
             Home
           </StyleLink>
         </Link>
-        <Link href="/services">
+        <Link href="/barangays">
           <StyleLink underline="hover" color="inherit">
-            Services
+            Barangays
           </StyleLink>
         </Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
-          Edit Services
+          Create Barangay
         </StyleLink>
       </Breadcrumbs>
       {renderForm()}
@@ -93,17 +85,14 @@ const EditServices = ({ service }) => {
   );
 };
 
-EditServices.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+CreateBarangays.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  const _service = services.find(({ id }) => id == ctx.query.serviceId);
   return {
-    props: {
-      service: _service,
-    },
+    props: {},
   };
 };
 
 export const getServerSideProps = withAdmin(getProps);
 
-export default EditServices;
+export default CreateBarangays;

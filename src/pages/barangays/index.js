@@ -4,21 +4,22 @@ import { Container, Stack, Button } from "@mui/material";
 
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { withAdmin } from "../../helpers/auth";
-import { users as _staffs } from "src/__mocks__/users";
-import StaffsTable from "src/components/StaffsTable/StaffsTable";
+import { barangays as _barangays } from "src/__mocks__/barangays";
+import BarangaysTable from "src/components/BarangaysTable/BarangaysTable";
 
 const Dashboard = (props) => {
-  const [staffs, setStaffs] = useState(props.staffs);
+  const [barangays, setBarangays] = useState(props.barangays);
+
   return (
     <Container>
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center" mb={2}>
-        <h1>Staffs</h1>
-        <Link href="staffs/new">
-          <Button variant="contained">Create staffs</Button>
+        <h1>Barangays</h1>
+        <Link href="barangays/new">
+          <Button variant="contained">Create Barangay</Button>
         </Link>
       </Stack>
 
-      <StaffsTable staffs={staffs} setStaffs={setStaffs} />
+      <BarangaysTable barangays={barangays} setBarangays={setBarangays} />
     </Container>
   );
 };
@@ -27,7 +28,7 @@ Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
   return {
-    props: { staffs: _staffs },
+    props: { barangays: _barangays },
   };
 };
 

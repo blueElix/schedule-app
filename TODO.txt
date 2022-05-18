@@ -4,15 +4,17 @@ DASHBOARD MENU
     > Staff - user form
     > Schedule - schedule form
     > Barangay 
-    > Barangay Staff
 
 > Barangay
-    > Schedule (Select date and time)
     > Select Services
+    > Schedule (Select date and time available from Services)
     > Client Details
+
+> Services
 
 > Client
 > Staff
+
 
 
 FORMS
@@ -31,11 +33,20 @@ Roles
     > name
 
 Schedule
-    > client name
     > date
     > time
+    > clientName -> user_id
 
 Barangay 
     > name
     > address
+
+
+User Ex
+> Alert/Toast
+> Loading
+
+Pages
+> Services view
+> Baranggay view
 

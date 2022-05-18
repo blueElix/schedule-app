@@ -4,21 +4,21 @@ import { Container, Stack, Button } from "@mui/material";
 
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { withAdmin } from "../../helpers/auth";
-import { users as _staffs } from "src/__mocks__/users";
-import StaffsTable from "src/components/StaffsTable/StaffsTable";
+import { schedules as _schedules } from "src/__mocks__/schedules";
+import SchedulesTable from "src/components/SchedulesTable/SchedulesTable";
 
 const Dashboard = (props) => {
-  const [staffs, setStaffs] = useState(props.staffs);
+  const [schedules, setSchedules] = useState(props.schedules);
   return (
     <Container>
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center" mb={2}>
-        <h1>Staffs</h1>
-        <Link href="staffs/new">
-          <Button variant="contained">Create staffs</Button>
+        <h1>Schedules</h1>
+        <Link href="schedules/new">
+          <Button variant="contained">Create schedule</Button>
         </Link>
       </Stack>
 
-      <StaffsTable staffs={staffs} setStaffs={setStaffs} />
+      <SchedulesTable schedules={schedules} setSchedules={setSchedules} />
     </Container>
   );
 };
@@ -27,7 +27,7 @@ Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
   return {
-    props: { staffs: _staffs },
+    props: { schedules: _schedules },
   };
 };
 

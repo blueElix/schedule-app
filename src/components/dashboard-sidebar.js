@@ -40,11 +40,6 @@ const authLinks = [
     icon: <AccountBalanceIcon fontSize="small" />,
     title: "Barangays",
   },
-  {
-    href: "/barangays-staff",
-    icon: <GroupIcon fontSize="small" />,
-    title: "Barangay Staffs",
-  },
   // {
   //   href: "/settings",
   //   icon: <CogIcon fontSize="small" />,
