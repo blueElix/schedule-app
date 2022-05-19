@@ -1,21 +1,21 @@
 DASHBOARD MENU
 > Admin
-    > Services - role form
-    > Staff - user form
-    > Schedule - schedule form
-    > Barangay 
+    > Services - role form //
+    > Staff - user form //
+    > Schedule - schedule form //
+    > Barangay //
+    > Booking Schedule //
 
 > Barangay
+    Booking Schedule
     > Select Services
     > Schedule (Select date and time available from Services)
     > Client Details
 
 > Services
+    > View all booking schedule available
 
-> Client
-> Staff
-
-
+> Search Form
 
 FORMS
 User form
@@ -41,6 +41,10 @@ Barangay
     > name
     > address
 
+Booking
+    > Services
+    > Schedule depends on services
+    > Client 
 
 User Ex
 > Alert/Toast
@@ -49,4 +53,22 @@ User Ex
 Pages
 > Services view
 > Baranggay view
+
+
+MENU
+> Superadmin/Admin 
+    - DASHBOARD
+    - Services
+    - Staffs
+    - Schedule
+    - Barangays
+    - Booking
+    - Profile
+    - Logout
+
+> Barangay Staff
+    - Booking
+    - Profile
+    - Logout
+
 

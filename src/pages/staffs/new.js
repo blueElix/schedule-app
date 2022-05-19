@@ -63,6 +63,19 @@ const CreateStaffs = () => {
           value={formik.values.name}
           variant="outlined"
         />
+        <TextField
+          error={Boolean(formik.touched.email && formik.errors.email)}
+          fullWidth
+          helperText={formik.touched.email && formik.errors.email}
+          label="Staff Email Address"
+          margin="normal"
+          name="email"
+          onBlur={formik.handleBlur}
+          onChange={formik.handleChange}
+          type="email"
+          value={formik.values.email}
+          variant="outlined"
+        />
         <FormControl error={Boolean(formik.touched.type && formik.errors.type)} margin="normal">
           <FormLabel id="staffType">Type</FormLabel>
           <RadioGroup

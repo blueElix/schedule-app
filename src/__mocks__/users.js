@@ -19,7 +19,7 @@ export const users = [
     email: "cao.yu@devias.io",
     name: "Cao Yu",
     contact: "9123515711",
-    role: "admin",
+    role: "user",
     type: "barangay-staff",
     barangayId: "",
     serviceId: "",

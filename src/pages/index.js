@@ -13,7 +13,7 @@ Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
   return {
-    props: { customers },
+    props: {},
   };
 };
 

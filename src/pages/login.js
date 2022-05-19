@@ -7,9 +7,12 @@ import * as Yup from "yup";
 import { Box, Button, Container, Link, TextField, Typography } from "@mui/material";
 import { authenticate, isAuth } from "../helpers/auth";
 import { users } from "src/__mocks__/users";
+import useLocalStorage from "src/hooks/useLocalStorage";
 
 const Login = () => {
   const router = useRouter();
+  const [_, setUser] = useLocalStorage("user", null);
+
   const formik = useFormik({
     initialValues: {
       email: "ecarlos.devacad@gmail.com",
@@ -25,12 +28,13 @@ const Login = () => {
       ) {
         const token =
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzA5ZDgzMGUwYzBlMGQyOGEwYTU1YSIsImlhdCI6MTY1MjUxMDE5NiwiZXhwIjoxNjYwMjg2MTk2fQ.u8Lj9KMc1tlQAlsvKK5u6hNHrMUcxODmSlPn0HroJ4o";
-        const _user = users.find(({ id }) => id === "6c3efc1d-fbd6-4ead-b123-4f7d28b96419");
+        const _user = users.find(({ email }) => email === values.email);
+        setUser(_user);
 
-        authenticate(token, _user, () => {
+        authenticate(token, () => {
           isAuth() && (_user.role === "admin" || _user.role === "superadmin")
             ? router.push("/")
-            : router.push("/");
+            : router.push("/bookings");
         });
       }
     },

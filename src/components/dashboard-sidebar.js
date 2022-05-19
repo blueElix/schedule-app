@@ -1,20 +1,23 @@
 import { useEffect } from "react";
 import PropTypes from "prop-types";
-import NextLink from "next/link";
+import Link from "next/link";
 import { useRouter } from "next/router";
-
 import { Box, Drawer, useMediaQuery } from "@mui/material";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import GroupIcon from "@mui/icons-material/Group";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
+import { logout } from "src/helpers/auth";
 
 import { Logo } from "./logo";
 import { NavItem } from "./nav-item";
 
-const authLinks = [
+const adminLinks = [
   {
     href: "/",
     icon: <InsertChartIcon fontSize="small" />,
@@ -40,11 +43,16 @@ const authLinks = [
     icon: <AccountBalanceIcon fontSize="small" />,
     title: "Barangays",
   },
-  // {
-  //   href: "/settings",
-  //   icon: <CogIcon fontSize="small" />,
-  //   title: "Settings",
-  // },
+  {
+    href: "/bookings",
+    icon: <MenuBookIcon fontSize="small" />,
+    title: "Bookings",
+  },
+  {
+    href: "/account",
+    icon: <AccountCircleIcon fontSize="small" />,
+    title: "Profile",
+  },
 ];
 
 export const DashboardSidebar = (props) => {
@@ -80,7 +88,7 @@ export const DashboardSidebar = (props) => {
       >
         <div>
           <Box sx={{ p: 3 }}>
-            <NextLink href="/" passHref>
+            <Link href="/">
               <a>
                 <Logo
                   sx={{
@@ -89,13 +97,19 @@ export const DashboardSidebar = (props) => {
                   }}
                 />
               </a>
-            </NextLink>
+            </Link>
           </Box>
         </div>
         <Box sx={{ flexGrow: 1 }}>
-          {authLinks.map((item) => (
+          {adminLinks.map((item) => (
             <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
           ))}
+          <NavItem
+            icon={<ExitToAppIcon fontSize="small" />}
+            title="Logout"
+            href="/login"
+            onClick={logout}
+          />
         </Box>
       </Box>
     </>

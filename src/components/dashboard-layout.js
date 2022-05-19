@@ -7,6 +7,7 @@ import { styled } from "@mui/material/styles";
 import { DashboardNavbar } from "./dashboard-navbar";
 import { DashboardSidebar } from "./dashboard-sidebar";
 import "nprogress/nprogress.css";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 Router.onRouteChangeStart = () => NProgress.start();
 Router.onRouteChangeComplete = () => NProgress.done();
@@ -25,13 +26,6 @@ const DashboardLayoutRoot = styled("div")(({ theme }) => ({
 export const DashboardLayout = (props) => {
   const { children } = props;
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    if (localStorage.getItem("user")) {
-      setUser(localStorage.getItem("user"));
-    }
-  }, []);
 
   return (
     <>
@@ -58,10 +52,8 @@ export const DashboardLayout = (props) => {
           </Box>
         </Box>
       </DashboardLayoutRoot>
-      {user && <DashboardNavbar user={user} onSidebarOpen={() => setSidebarOpen(true)} />}
-      {user && user.role !== "user" && (
-        <DashboardSidebar onClose={() => setSidebarOpen(false)} open={isSidebarOpen} />
-      )}
+      <DashboardNavbar onSidebarOpen={() => setSidebarOpen(true)} />
+      <DashboardSidebar onClose={() => setSidebarOpen(false)} open={isSidebarOpen} />
     </>
   );
 };

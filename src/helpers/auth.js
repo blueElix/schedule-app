@@ -3,6 +3,7 @@ import Router from "next/router";
 // import axios from "axios";
 // import { API } from "../config";
 import { users } from "../__mocks__/users";
+import useLocalStorage from "src/hooks/useLocalStorage";
 
 // set in cookie
 export const setCookie = (key, value) => {
@@ -62,9 +63,8 @@ export const removeLocalStorage = (key) => {
 };
 
 // authenticate user by passing data to cookie and localstorage during signin
-export const authenticate = (token, userData, cb) => {
+export const authenticate = (token, cb) => {
   setCookie("token", token);
-  setLocalStorage("user", userData);
   cb();
 };
 
@@ -118,10 +118,53 @@ export const withAdmin = (gssp) => {
     if (user === null || (user.role !== "superadmin" && user.role !== "admin")) {
       // redirect
 
-      if (typeof window === "undefined" && ctx.res.writeHead) {
-        ctx.res.writeHead(302, { Location: "/login" });
-        ctx.res.end();
-        return;
+      if (typeof window === "undefined") {
+        return {
+          redirect: {
+            permanent: false,
+            destination: "/login",
+          },
+        };
+      }
+    } else {
+      return gssp(ctx, { token, user });
+    }
+
+    return gssp(ctx, { token, user });
+  };
+};
+
+export const withUser = (gssp) => {
+  return async (ctx) => {
+    const token = getCookie("token", ctx.req);
+    let user = users[1];
+
+    // if (token) {
+    //   try {
+    //     const response = await axios.get(`${API}/users/me`, {
+    //       headers: {
+    //         'Authorization': `Bearer ${token}`,
+    //       }
+    //     });
+
+    //     user = response.data.data;
+    //   } catch (error) {
+    //     if (error.response.status === 401) {
+    //       user = null;
+    //     }
+    //   }
+    // }
+
+    if (user === null) {
+      // redirect
+
+      if (typeof window === "undefined") {
+        return {
+          redirect: {
+            permanent: false,
+            destination: "/login",
+          },
+        };
       }
     } else {
       return gssp(ctx, { token, user });
