@@ -6,7 +6,7 @@ DASHBOARD MENU
     > Barangay //
     > Booking Schedule //
 
-> Barangay
+> Barangay View
     Booking Schedule
     > Select Services
     > Schedule (Select date and time available from Services)

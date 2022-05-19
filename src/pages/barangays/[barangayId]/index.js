@@ -4,6 +4,7 @@ import Link from "next/link";
 import { DashboardLayout } from "../../../components/dashboard-layout";
 import { withAdmin } from "../../../helpers/auth";
 import { barangays } from "src/__mocks__/barangays";
+import Loader from "../../../components/Loader/Loader";
 
 const BarangaysDetails = ({ barangay }) => {
   return (
@@ -24,11 +25,14 @@ const BarangaysDetails = ({ barangay }) => {
           Details
         </StyleLink>
       </Breadcrumbs>
-
-      <div>
-        <h3>Name: {barangay.name}</h3>
-        <h4>Address: {barangay.address}</h4>
-      </div>
+      {!barangay ? (
+        <Loader />
+      ) : (
+        <div>
+          <h3>Name: {barangay.name}</h3>
+          <h4>Address: {barangay.address}</h4>
+        </div>
+      )}
     </Container>
   );
 };

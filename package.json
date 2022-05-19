@@ -38,6 +38,7 @@
     "react-input-mask": "^2.0.4",
     "react-perfect-scrollbar": "^1.5.8",
     "react-select-search": "^3.0.9",
+    "react-toastify": "^9.0.1",
     "uuid": "^8.3.0",
     "yup": "^0.32.9"
   },

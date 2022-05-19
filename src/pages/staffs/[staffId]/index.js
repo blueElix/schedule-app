@@ -4,6 +4,7 @@ import Link from "next/link";
 import { DashboardLayout } from "../../../components/dashboard-layout";
 import { withAdmin } from "../../../helpers/auth";
 import { users } from "src/__mocks__/users";
+import Loader from "../../../components/Loader/Loader";
 
 const StaffsDetails = ({ staff }) => {
   return (
@@ -25,13 +26,17 @@ const StaffsDetails = ({ staff }) => {
         </StyleLink>
       </Breadcrumbs>
 
-      <div>
-        <h3>Name: {staff.name}</h3>
-        <h4>Role: {staff.role}</h4>
-        <h4>Email: {staff.email}</h4>
-        <h4>Contact: +60{staff.contact}</h4>
-        <h4>Type: {staff.type}</h4>
-      </div>
+      {!staff ? (
+        <Loader />
+      ) : (
+        <div>
+          <h3>Name: {staff.name}</h3>
+          <h4>Role: {staff.role}</h4>
+          <h4>Email: {staff.email}</h4>
+          <h4>Contact: +60{staff.contact}</h4>
+          <h4>Type: {staff.type}</h4>
+        </div>
+      )}
     </Container>
   );
 };

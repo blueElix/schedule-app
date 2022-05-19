@@ -22,6 +22,7 @@ import { withAdmin } from "../../../helpers/auth";
 import { services } from "src/__mocks__/services";
 import { schedules } from "src/__mocks__/schedules";
 import { bookings } from "src/__mocks__/bookings";
+import Loader from "../../../components/Loader/Loader";
 
 const EditBookings = ({ booking }) => {
   const formik = useFormik({
@@ -198,6 +199,8 @@ const EditBookings = ({ booking }) => {
         </StyleLink>
       </Breadcrumbs>
       {renderForm()}
+
+      {!booking ? <Loader /> : renderForm()}
     </Container>
   );
 };

@@ -6,20 +6,37 @@ import { DashboardLayout } from "../../components/dashboard-layout";
 import { withAdmin } from "../../helpers/auth";
 import { services as _services } from "src/__mocks__/services";
 import ServicesTable from "src/components/ServicesTable/ServicesTables";
+import SearchForm from "src/components/SearchForm/SearchForm";
+import Loader from "src/components/Loader/Loader";
 
 const Dashboard = (props) => {
   const [services, setServices] = useState(props.services);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleOnSearch = (value) => {
+    setIsLoading(true);
+    setServices(services.filter(({ name }) => name.toLowerCase().startsWith(value.toLowerCase())));
+    setIsLoading(false);
+  };
 
   return (
     <Container>
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center" mb={2}>
         <h1>Services</h1>
-        <Link href="services/new">
-          <Button variant="contained">Create services</Button>
-        </Link>
+
+        <Stack direction="row" spacing={2}>
+          <SearchForm onSearch={handleOnSearch} resetSearch={() => setServices(props.services)} />
+          <Link href="services/new">
+            <Button variant="contained">Create services</Button>
+          </Link>
+        </Stack>
       </Stack>
 
-      <ServicesTable services={services} setServices={setServices} />
+      {isLoading || !services ? (
+        <Loader />
+      ) : (
+        <ServicesTable services={services} setServices={setServices} />
+      )}
     </Container>
   );
 };

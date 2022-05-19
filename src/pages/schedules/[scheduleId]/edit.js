@@ -28,6 +28,7 @@ import { DashboardLayout } from "../../../components/dashboard-layout";
 import { withAdmin } from "../../../helpers/auth";
 import { services } from "src/__mocks__/services";
 import { schedules } from "src/__mocks__/schedules";
+import Loader from "../../../components/Loader/Loader";
 
 const EditSchedules = ({ schedule }) => {
   const formik = useFormik({
@@ -163,7 +164,7 @@ const EditSchedules = ({ schedule }) => {
           Edit Schedules
         </StyleLink>
       </Breadcrumbs>
-      {renderForm()}
+      {!schedule ? <Loader /> : renderForm()}
     </Container>
   );
 };

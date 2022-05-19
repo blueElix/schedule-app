@@ -7,7 +7,7 @@ import { styled } from "@mui/material/styles";
 import { DashboardNavbar } from "./dashboard-navbar";
 import { DashboardSidebar } from "./dashboard-sidebar";
 import "nprogress/nprogress.css";
-import useLocalStorage from "../hooks/useLocalStorage";
+import { ToastContainer } from "react-toastify";
 
 Router.onRouteChangeStart = () => NProgress.start();
 Router.onRouteChangeComplete = () => NProgress.done();
@@ -29,6 +29,7 @@ export const DashboardLayout = (props) => {
 
   return (
     <>
+      <ToastContainer />
       <DashboardLayoutRoot>
         <Box
           sx={{

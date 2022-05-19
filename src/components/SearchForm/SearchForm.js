@@ -1,8 +1,10 @@
-import * as React from "react";
+import React, { useState, useRef } from "react";
 import { Paper, InputBase, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-export default function SearchForm() {
+export default function SearchForm({ onSearch, resetSearch }) {
+  const [searchParams, setSearchParams] = useState("");
+
   return (
     <Paper
       component="form"
@@ -12,8 +14,14 @@ export default function SearchForm() {
         sx={{ ml: 1, flex: 1 }}
         placeholder="Search"
         inputProps={{ "aria-label": "search" }}
+        value={searchParams}
+        type="search"
+        onChange={(e) => {
+          if (e.target.value == "") resetSearch();
+          setSearchParams(e.target.value);
+        }}
       />
-      <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+      <IconButton onClick={() => onSearch(searchParams)} sx={{ p: "10px" }} aria-label="search">
         <SearchIcon />
       </IconButton>
     </Paper>

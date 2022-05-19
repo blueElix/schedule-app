@@ -6,19 +6,33 @@ import { DashboardLayout } from "../../components/dashboard-layout";
 import { withAdmin } from "../../helpers/auth";
 import { users as _staffs } from "src/__mocks__/users";
 import StaffsTable from "src/components/StaffsTable/StaffsTable";
+import SearchForm from "src/components/SearchForm/SearchForm";
+import Loader from "src/components/Loader/Loader";
 
 const Dashboard = (props) => {
   const [staffs, setStaffs] = useState(props.staffs);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleOnSearch = (value) => {
+    setIsLoading(true);
+    setStaffs(staffs.filter(({ name }) => name.toLowerCase().startsWith(value.toLowerCase())));
+    setIsLoading(false);
+  };
+
   return (
     <Container>
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center" mb={2}>
         <h1>Staffs</h1>
-        <Link href="staffs/new">
-          <Button variant="contained">Create staffs</Button>
-        </Link>
+
+        <Stack direction="row" spacing={2}>
+          <SearchForm onSearch={handleOnSearch} resetSearch={() => setStaffs(props.staffs)} />
+          <Link href="staffs/new">
+            <Button variant="contained">Create staffs</Button>
+          </Link>
+        </Stack>
       </Stack>
 
-      <StaffsTable staffs={staffs} setStaffs={setStaffs} />
+      {isLoading || !staffs ? <Loader /> : <StaffsTable staffs={staffs} setStaffs={setStaffs} />}
     </Container>
   );
 };

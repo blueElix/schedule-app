@@ -4,6 +4,7 @@ import Link from "next/link";
 import { DashboardLayout } from "../../../components/dashboard-layout";
 import { withAdmin } from "../../../helpers/auth";
 import { services } from "src/__mocks__/services";
+import Loader from "../../../components/Loader/Loader";
 
 const ServicesDetails = ({ service }) => {
   return (
@@ -23,10 +24,14 @@ const ServicesDetails = ({ service }) => {
         </StyleLink>
       </Breadcrumbs>
 
-      <div>
-        <h3>Name: {service.name}</h3>
-        <h4>Details: {service.description}</h4>
-      </div>
+      {!service ? (
+        <Loader />
+      ) : (
+        <div>
+          <h3>Name: {service.name}</h3>
+          <h4>Details: {service.description}</h4>
+        </div>
+      )}
     </Container>
   );
 };

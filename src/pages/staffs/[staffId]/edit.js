@@ -26,6 +26,7 @@ import { withAdmin } from "../../../helpers/auth";
 import { users } from "src/__mocks__/users";
 import { services } from "src/__mocks__/services";
 import { useEffect } from "react";
+import Loader from "../../../components/Loader/Loader";
 
 const EditStaffs = ({ staff }) => {
   const formik = useFormik({
@@ -142,23 +143,19 @@ const EditStaffs = ({ staff }) => {
   };
   return (
     <Container>
-      <h1>Edit Staffs</h1>
+      <h1>Edit Staff</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink underline="hover" color="inherit">
-            Home
-          </StyleLink>
-        </Link>
-        <Link href="/staffs">
-          <StyleLink underline="hover" color="inherit">
-            Staffs
-          </StyleLink>
-        </Link>
+        <StyleLink underline="hover" color="inherit">
+          <Link href="/">Home </Link>
+        </StyleLink>
+        <StyleLink underline="hover" color="inherit">
+          <Link href="/staffs">Staffs </Link>
+        </StyleLink>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
-          Edit Staffs
+          Edit Staff
         </StyleLink>
       </Breadcrumbs>
-      {renderForm()}
+      {!staff ? <Loader /> : renderForm()}
     </Container>
   );
 };

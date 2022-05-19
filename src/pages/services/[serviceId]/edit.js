@@ -7,6 +7,7 @@ import { DashboardLayout } from "../../../components/dashboard-layout";
 import { withAdmin } from "../../../helpers/auth";
 import { services } from "src/__mocks__/services";
 import { useEffect } from "react";
+import Loader from "../../../components/Loader/Loader";
 
 const EditServices = ({ service }) => {
   const formik = useFormik({
@@ -72,23 +73,19 @@ const EditServices = ({ service }) => {
 
   return (
     <Container>
-      <h1>Edit Services</h1>
+      <h1>Edit Service</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink underline="hover" color="inherit">
-            Home
-          </StyleLink>
-        </Link>
-        <Link href="/services">
-          <StyleLink underline="hover" color="inherit">
-            Services
-          </StyleLink>
-        </Link>
+        <StyleLink underline="hover" color="inherit">
+          <Link href="/">Home </Link>
+        </StyleLink>
+        <StyleLink underline="hover" color="inherit">
+          <Link href="/services">Services </Link>
+        </StyleLink>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
-          Edit Services
+          Edit Service
         </StyleLink>
       </Breadcrumbs>
-      {renderForm()}
+      {service ? <Loader /> : renderForm()}
     </Container>
   );
 };

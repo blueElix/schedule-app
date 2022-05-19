@@ -6,6 +6,7 @@ import { withAdmin } from "../../../helpers/auth";
 import { bookings } from "src/__mocks__/bookings";
 import { schedules as _schedules } from "src/__mocks__/schedules";
 import { services as _services } from "src/__mocks__/services";
+import Loader from "../../../components/Loader/Loader";
 
 const BookingsDetails = ({ booking }) => {
   const schedule = _schedules.find(({ id }) => id == booking.schedule);
@@ -25,16 +26,20 @@ const BookingsDetails = ({ booking }) => {
         </StyleLink>
       </Breadcrumbs>
 
-      <div>
-        <h3>Name: {booking.name}</h3>
-        <h4>Email: {booking.email}</h4>
-        <h4>Contact: +63{booking.contact}</h4>
-        <h4>Address: {booking.address}</h4>
-        <h4>
-          Schedule: {schedule.bookedDate} - {schedule.bookedTime}
-        </h4>
-        <h4>Services: {_services.find(({ id }) => id == booking.services).name}</h4>
-      </div>
+      {!booking ? (
+        <Loader />
+      ) : (
+        <div>
+          <h3>Name: {booking.name}</h3>
+          <h4>Email: {booking.email}</h4>
+          <h4>Contact: +63{booking.contact}</h4>
+          <h4>Address: {booking.address}</h4>
+          <h4>
+            Schedule: {schedule.bookedDate} - {schedule.bookedTime}
+          </h4>
+          <h4>Services: {_services.find(({ id }) => id == booking.services).name}</h4>
+        </div>
+      )}
     </Container>
   );
 };

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { DashboardLayout } from "../../../components/dashboard-layout";
 import { withAdmin } from "../../../helpers/auth";
 import { barangays } from "src/__mocks__/barangays";
+import Loader from "../../../components/Loader/Loader";
 
 const EditBarangays = ({ barangay }) => {
   const formik = useFormik({
@@ -69,6 +70,7 @@ const EditBarangays = ({ barangay }) => {
       </form>
     );
   };
+
   return (
     <Container>
       <h1>Edit Barangays</h1>
@@ -87,7 +89,7 @@ const EditBarangays = ({ barangay }) => {
           Edit Barangay
         </StyleLink>
       </Breadcrumbs>
-      {renderForm()}
+      {!barangay ? <Loader /> : renderForm()}
     </Container>
   );
 };

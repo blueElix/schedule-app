@@ -5,6 +5,7 @@ import { DashboardLayout } from "../../../components/dashboard-layout";
 import { withAdmin } from "../../../helpers/auth";
 import { schedules } from "src/__mocks__/schedules";
 import { services } from "src/__mocks__/services";
+import Loader from "../../../components/Loader/Loader";
 
 const SchedulesDetails = ({ schedule }) => {
   return (
@@ -26,12 +27,16 @@ const SchedulesDetails = ({ schedule }) => {
         </StyleLink>
       </Breadcrumbs>
 
-      <div>
-        <h3>Services: {services.find(({ id }) => id === schedule.services).name}</h3>
-        <h4>Date: {schedule.bookedDate}</h4>
-        <h4>Time: {schedule.bookedTime}</h4>
-        <h4>Availability: {schedule.isAvailable ? "Available" : "Not Available"}</h4>
-      </div>
+      {!schedule ? (
+        <Loader />
+      ) : (
+        <div>
+          <h3>Services: {services.find(({ id }) => id === schedule.services).name}</h3>
+          <h4>Date: {schedule.bookedDate}</h4>
+          <h4>Time: {schedule.bookedTime}</h4>
+          <h4>Availability: {schedule.isAvailable ? "Available" : "Not Available"}</h4>
+        </div>
+      )}
     </Container>
   );
 };
