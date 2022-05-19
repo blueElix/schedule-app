@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Router from "next/router";
 import NProgress from "nprogress";
 import { Box } from "@mui/material";

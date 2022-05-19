@@ -21,7 +21,7 @@ import * as Yup from "yup";
 import Link from "next/link";
 import InputMask from "react-input-mask";
 
-import { DashboardLayout } from "../../../components/dashboard-layout";
+import { DashboardLayout } from "../../../components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import { users } from "src/__mocks__/users";
 import { services } from "src/__mocks__/services";

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Container, Stack, Button } from "@mui/material";
 
-import { DashboardLayout } from "../../components/dashboard-layout";
+import { DashboardLayout } from "../../components/DashboadLayout";
 import { withUser } from "../../helpers/auth";
 import { bookings as _bookings } from "src/__mocks__/bookings";
 import BookingsTable from "../../components/BookingsTable/BookingsTable";

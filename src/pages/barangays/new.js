@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 
-import { DashboardLayout } from "../../components/dashboard-layout";
+import { DashboardLayout } from "../../components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 
 const CreateBarangays = () => {

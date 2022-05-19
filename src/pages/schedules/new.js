@@ -23,7 +23,7 @@ import * as Yup from "yup";
 import Link from "next/link";
 import moment from "moment";
 
-import { DashboardLayout } from "../../components/dashboard-layout";
+import { DashboardLayout } from "../../components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 import { services } from "src/__mocks__/services";
 

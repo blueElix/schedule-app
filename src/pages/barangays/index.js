@@ -2,7 +2,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Container, Stack, Button } from "@mui/material";
 
-import { DashboardLayout } from "../../components/dashboard-layout";
+import { DashboardLayout } from "../../components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 import { barangays as _barangays } from "src/__mocks__/barangays";
 import BarangaysTable from "src/components/BarangaysTable/BarangaysTable";

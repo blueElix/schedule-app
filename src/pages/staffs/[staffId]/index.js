@@ -1,7 +1,7 @@
 import { Container, Breadcrumbs, Link as StyleLink } from "@mui/material";
 import Link from "next/link";
 
-import { DashboardLayout } from "../../../components/dashboard-layout";
+import { DashboardLayout } from "../../../components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import { users } from "src/__mocks__/users";
 import Loader from "../../../components/Loader/Loader";

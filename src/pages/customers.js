@@ -1,7 +1,7 @@
 import { Box, Container } from "@mui/material";
 import { CustomerListResults } from "../components/customer/customer-list-results";
 import { CustomerListToolbar } from "../components/customer/customer-list-toolbar";
-import { DashboardLayout } from "../components/dashboard-layout";
+import { DashboardLayout } from "../components/DashboadLayout";
 import { customers } from "../__mocks__/customers";
 
 const Customers = () => (

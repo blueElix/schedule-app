@@ -1,7 +1,6 @@
 import { Container } from "@mui/material";
-import { DashboardLayout } from "../components/dashboard-layout";
+import { DashboardLayout } from "../components/DashboadLayout";
 import { withAdmin } from "src/helpers/auth";
-import { customers } from "src/__mocks__/customers";
 
 const Dashboard = () => (
   <Container>
