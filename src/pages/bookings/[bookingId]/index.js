@@ -1,5 +1,7 @@
-import { Container, Breadcrumbs, Link as StyleLink } from "@mui/material";
+import { useRef } from "react";
+import { Container, Breadcrumbs, Link as StyleLink, Button } from "@mui/material";
 import Link from "next/link";
+import { useReactToPrint } from "react-to-print";
 
 import { DashboardLayout } from "../../../components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
@@ -10,17 +12,17 @@ import Loader from "../../../components/Loader/Loader";
 
 const BookingsDetails = ({ booking }) => {
   const schedule = _schedules.find(({ id }) => id == booking.schedule);
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   return (
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <StyleLink underline="hover" color="inherit">
-          <Link href="/">Home </Link>
-        </StyleLink>
-        <StyleLink underline="hover" color="inherit">
-          <Link href="/bookings">Bookings </Link>
-        </StyleLink>
+        <Link href="/">Home </Link>
+        <Link href="/bookings">Bookings </Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
           Details
         </StyleLink>
@@ -29,16 +31,21 @@ const BookingsDetails = ({ booking }) => {
       {!booking ? (
         <Loader />
       ) : (
-        <div>
-          <h3>Name: {booking.name}</h3>
-          <h4>Email: {booking.email}</h4>
-          <h4>Contact: +63{booking.contact}</h4>
-          <h4>Address: {booking.address}</h4>
-          <h4>
-            Schedule: {schedule.bookedDate} - {schedule.bookedTime}
-          </h4>
-          <h4>Services: {_services.find(({ id }) => id == booking.services).name}</h4>
-        </div>
+        <>
+          <Container ref={componentRef} sx={{ marginTop: "10px" }}>
+            <h3>Name: {booking.name}</h3>
+            <h4>Email: {booking.email}</h4>
+            <h4>Contact: +63{booking.contact}</h4>
+            <h4>Address: {booking.address}</h4>
+            <h4>
+              Schedule: {schedule.bookedDate} - {schedule.bookedTime}
+            </h4>
+            <h4>Services: {_services.find(({ id }) => id == booking.services).name}</h4>
+          </Container>
+          <Button onClick={handlePrint} sx={{ margin: "10px" }}>
+            Print this out!
+          </Button>
+        </>
       )}
     </Container>
   );

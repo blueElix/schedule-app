@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Container, Breadcrumbs, Link as StyleLink, Box, Button, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -6,10 +6,14 @@ import Link from "next/link";
 
 import { DashboardLayout } from "../../../components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
+import { toastMsg } from "../../../helpers/toast";
+
 import { barangays } from "src/__mocks__/barangays";
 import Loader from "../../../components/Loader/Loader";
 
 const EditBarangays = ({ barangay }) => {
+  const [submitting, setSubmitting] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -20,7 +24,14 @@ const EditBarangays = ({ barangay }) => {
       address: Yup.string(),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      try {
+        setSubmitting(true);
+        console.log(values);
+        setSubmitting(false);
+        toastMsg("success", "Successfully updated barangay.");
+      } catch (error) {
+        toastMsg("error", "Something went wrong.");
+      }
     },
   });
 
@@ -28,6 +39,8 @@ const EditBarangays = ({ barangay }) => {
     if (barangay) {
       formik.setFieldValue("name", barangay.name);
       formik.setFieldValue("address", barangay.address);
+    } else {
+      toastMsg("error", `Selected barangay didn't load.`);
     }
   }, []);
 
@@ -63,7 +76,7 @@ const EditBarangays = ({ barangay }) => {
         />
 
         <Box sx={{ py: 2 }} textAlign="right">
-          <Button color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
+          <Button color="primary" disabled={submitting} type="submit" variant="contained">
             Submit
           </Button>
         </Box>
@@ -75,16 +88,8 @@ const EditBarangays = ({ barangay }) => {
     <Container>
       <h1>Edit Barangays</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink underline="hover" color="inherit">
-            Home
-          </StyleLink>
-        </Link>
-        <Link href="/barangays">
-          <StyleLink underline="hover" color="inherit">
-            Barangays
-          </StyleLink>
-        </Link>
+        <Link href="/">Home </Link>
+        <Link href="/barangays">Barangays </Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
           Edit Barangay
         </StyleLink>

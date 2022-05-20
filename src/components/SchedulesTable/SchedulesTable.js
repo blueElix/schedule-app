@@ -64,7 +64,7 @@ const SchedulesTable = ({ schedules, setSchedules }) => {
                 >
                   <TableCell component="th">{index + 1}</TableCell>
                   <TableCell scope="row">
-                    <Link href={`schedules/${schedule.id}`}>
+                    <Link href={{ pathname: `/schedules/${schedule.id}` }}>
                       {services.find(({ id }) => id === schedule.services).name}
                     </Link>
                   </TableCell>

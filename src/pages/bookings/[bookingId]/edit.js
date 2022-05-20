@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Container,
   Breadcrumbs,
@@ -23,8 +23,11 @@ import { services } from "src/__mocks__/services";
 import { schedules } from "src/__mocks__/schedules";
 import { bookings } from "src/__mocks__/bookings";
 import Loader from "../../../components/Loader/Loader";
+import { toastMsg } from "../../../helpers/toast";
 
 const EditBookings = ({ booking }) => {
+  const [submitting, setSubmitting] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       services: "",
@@ -42,11 +45,18 @@ const EditBookings = ({ booking }) => {
       email: Yup.string()
         .email("Must be a valid email")
         .max(255)
-        .required("Staff email is required"),
+        .required("Client email is required"),
       address: Yup.string(),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      try {
+        setSubmitting(true);
+        console.log(values);
+        setSubmitting(false);
+        toastMsg("success", "Successfully updated booking.");
+      } catch (error) {
+        toastMsg("error", "Something went wrong.");
+      }
     },
   });
 
@@ -58,6 +68,8 @@ const EditBookings = ({ booking }) => {
       formik.setFieldValue("address", booking.address);
       formik.setFieldValue("email", booking.email);
       formik.setFieldValue("contact", booking.contact);
+    } else {
+      toastMsg("error", `Selected booking didn't load.`);
     }
   }, []);
 
@@ -174,7 +186,7 @@ const EditBookings = ({ booking }) => {
         />
 
         <Box sx={{ py: 2 }} textAlign="right">
-          <Button color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
+          <Button color="primary" disabled={submitting} type="submit" variant="contained">
             Submit
           </Button>
         </Box>
@@ -186,20 +198,12 @@ const EditBookings = ({ booking }) => {
     <Container>
       <h1>Edit Booking</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <StyleLink underline="hover" color="inherit">
-          <Link href="/">Home</Link>
-        </StyleLink>
-
-        <StyleLink underline="hover" color="inherit">
-          <Link href="/bookings">Bookings</Link>
-        </StyleLink>
-
+        <Link href="/">Home</Link>
+        <Link href="/bookings">Bookings</Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
           Edit Booking
         </StyleLink>
       </Breadcrumbs>
-      {renderForm()}
-
       {!booking ? <Loader /> : renderForm()}
     </Container>
   );

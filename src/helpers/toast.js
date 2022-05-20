@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import { toast } from "material-react-toastify";
 
 export const toastMsg = (type, message) => {
   switch (type) {

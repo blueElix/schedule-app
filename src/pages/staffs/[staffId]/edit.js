@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Container,
   Breadcrumbs,
@@ -25,10 +26,12 @@ import { DashboardLayout } from "../../../components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import { users } from "src/__mocks__/users";
 import { services } from "src/__mocks__/services";
-import { useEffect } from "react";
+import { toastMsg } from "../../../helpers/toast";
 import Loader from "../../../components/Loader/Loader";
 
 const EditStaffs = ({ staff }) => {
+  const [submitting, setSubmitting] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -47,7 +50,16 @@ const EditStaffs = ({ staff }) => {
       type: Yup.string().required("Staff type is required."),
       role: Yup.string(),
     }),
-    onSubmit: () => {},
+    onSubmit: (values) => {
+      try {
+        setSubmitting(true);
+        console.log(values);
+        setSubmitting(false);
+        toastMsg("success", "Successfully updated staff.");
+      } catch (error) {
+        toastMsg("error", "Something went wrong.");
+      }
+    },
   });
 
   useEffect(() => {
@@ -57,6 +69,8 @@ const EditStaffs = ({ staff }) => {
       formik.setFieldValue("email", staff.email);
       formik.setFieldValue("type", staff.type);
       formik.setFieldValue("role", staff.role);
+    } else {
+      toastMsg("error", `Selected staff didn't load.`);
     }
   }, []);
 
@@ -134,7 +148,7 @@ const EditStaffs = ({ staff }) => {
         </FormControl>
 
         <Box sx={{ py: 2 }} textAlign="right">
-          <Button color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
+          <Button color="primary" disabled={submitting} type="submit" variant="contained">
             Submit
           </Button>
         </Box>
@@ -145,12 +159,8 @@ const EditStaffs = ({ staff }) => {
     <Container>
       <h1>Edit Staff</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <StyleLink underline="hover" color="inherit">
-          <Link href="/">Home </Link>
-        </StyleLink>
-        <StyleLink underline="hover" color="inherit">
-          <Link href="/staffs">Staffs </Link>
-        </StyleLink>
+        <Link href="/">Home </Link>
+        <Link href="/staffs">Staffs </Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
           Edit Staff
         </StyleLink>

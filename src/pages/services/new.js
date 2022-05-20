@@ -1,12 +1,18 @@
+import { useState } from "react";
 import { Container, Breadcrumbs, Link as StyleLink, Box, Button, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
+import { toastMsg } from "../../helpers/toast";
 import { DashboardLayout } from "../../components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 
 const CreateServices = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -16,7 +22,20 @@ const CreateServices = () => {
       name: Yup.string().required("Services name is required."),
       description: Yup.string(),
     }),
-    onSubmit: () => {},
+    onSubmit: (values, { resetForm }) => {
+      try {
+        setSubmitting(true);
+        console.log(values);
+        setTimeout(() => {
+          setSubmitting(false);
+          router.push("/services");
+          resetForm();
+          toastMsg("success", "Successfully created service.");
+        }, 300);
+      } catch (error) {
+        toastMsg("error", "Something went wrong.");
+      }
+    },
   });
 
   const renderForm = () => {
@@ -51,7 +70,7 @@ const CreateServices = () => {
           rows={4}
         />
         <Box sx={{ py: 2 }} textAlign="right">
-          <Button color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
+          <Button color="primary" disabled={submitting} type="submit" variant="contained">
             Submit
           </Button>
         </Box>
@@ -63,16 +82,8 @@ const CreateServices = () => {
     <Container>
       <h1>Create Services</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink underline="hover" color="inherit">
-            Home
-          </StyleLink>
-        </Link>
-        <Link href="/services">
-          <StyleLink underline="hover" color="inherit">
-            Services
-          </StyleLink>
-        </Link>
+        <Link href="/">Home </Link>
+        <Link href="/services">Services </Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
           Create Services
         </StyleLink>

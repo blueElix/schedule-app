@@ -11,16 +11,8 @@ const StaffsDetails = ({ staff }) => {
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <Link href="/">
-          <StyleLink underline="hover" color="inherit">
-            Home
-          </StyleLink>
-        </Link>
-        <Link href="/staffs">
-          <StyleLink underline="hover" color="inherit">
-            Staffs
-          </StyleLink>
-        </Link>
+        <Link href="/">Home</Link>
+        <Link href="/staffs">Staffs</Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
           Details
         </StyleLink>

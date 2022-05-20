@@ -1,13 +1,19 @@
+import { useState } from "react";
 import { Container, Breadcrumbs, Link as StyleLink, Box, Button, TextField } from "@mui/material";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { DashboardLayout } from "../../components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
+import { toastMsg } from "../../helpers/toast";
 
 const CreateBarangays = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -17,8 +23,20 @@ const CreateBarangays = () => {
       name: Yup.string().required("Barangay name is required."),
       address: Yup.string(),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: (values, { resetForm }) => {
+      try {
+        setSubmitting(true);
+        console.log(values);
+
+        setTimeout(() => {
+          setSubmitting(false);
+          resetForm();
+          router.push("/barangays");
+          toastMsg("success", "Successfully created barangay.");
+        }, 300);
+      } catch (error) {
+        toastMsg("error", "Something went wrong.");
+      }
     },
   });
 
@@ -54,7 +72,7 @@ const CreateBarangays = () => {
         />
 
         <Box sx={{ py: 2 }} textAlign="right">
-          <Button color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
+          <Button color="primary" disabled={submitting} type="submit" variant="contained">
             Submit
           </Button>
         </Box>
@@ -66,16 +84,8 @@ const CreateBarangays = () => {
     <Container>
       <h1>Create Barangay</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink underline="hover" color="inherit">
-            Home
-          </StyleLink>
-        </Link>
-        <Link href="/barangays">
-          <StyleLink underline="hover" color="inherit">
-            Barangays
-          </StyleLink>
-        </Link>
+        <Link href="/">Home</Link>
+        <Link href="/barangays">Barangays </Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
           Create Barangay
         </StyleLink>

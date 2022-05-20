@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Container,
   Breadcrumbs,
@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TimePicker, DatePicker } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -29,8 +29,11 @@ import { withAdmin } from "../../../helpers/auth";
 import { services } from "src/__mocks__/services";
 import { schedules } from "src/__mocks__/schedules";
 import Loader from "../../../components/Loader/Loader";
+import { toastMsg } from "../../../helpers/toast";
 
 const EditSchedules = ({ schedule }) => {
+  const [submitting, setSubmitting] = useState(false);
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -46,27 +49,78 @@ const EditSchedules = ({ schedule }) => {
       isAvailable: Yup.boolean(),
     }),
     onSubmit: (values) => {
-      const payload = {
-        bookedDate: moment(values.bookedDate).format("M/D/YYYY"),
-        bookedTime: moment(values.bookedTime).format("HH:mm a"),
-        services: values.services,
-        isAvailable: values.isAvailable,
-      };
-      console.log(payload);
+      try {
+        const payload = {
+          bookedDate: moment(values.bookedDate).format("M/D/YYYY"),
+          bookedTime: values.bookedTime,
+          services: values.services,
+          isAvailable: values.isAvailable,
+        };
+
+        setSubmitting(true);
+        console.log(payload);
+        setSubmitting(false);
+        toastMsg("success", "Successfully updated schedule.");
+      } catch (error) {
+        toastMsg("error", "Something went wrong.");
+      }
     },
   });
 
   useEffect(() => {
     if (schedule) {
       formik.setFieldValue("services", schedule.services);
-      formik.setFieldValue(
-        "bookedTime",
-        new Date(moment(schedule.bookedDate + " " + schedule.bookedTime))
-      );
+      formik.setFieldValue("bookedTime", schedule.bookedTime);
       formik.setFieldValue("bookedDate", schedule.bookedDate);
       formik.setFieldValue("isAvailable", schedule.isAvailable);
+    } else {
+      toastMsg("error", `Selected schedule didn't load.`);
     }
   }, []);
+
+  const renderTimeSelect = () => {
+    const formattedDate = moment(formik.values.bookedDate).format("YYYY-MM-DD");
+    const startDate = moment(formattedDate + " " + "08:00");
+    const endDate = moment(formattedDate + " " + "16:45");
+    const datesBetween = [];
+
+    const startingMoment = startDate;
+
+    while (startingMoment <= endDate) {
+      datesBetween.push(startingMoment.clone()); // clone to add new object
+      startingMoment.add(15, "minutes").format("hh:mm A");
+    }
+
+    return (
+      <FormControl fullWidth margin="normal">
+        <InputLabel id="selectTimeslot">Select booking time</InputLabel>
+        <Select
+          labelId="selectTimeslot"
+          id="demo-simple-select"
+          value={formik.values.bookedTime}
+          label="Select bookedTime"
+          name="bookedTime"
+          onChange={formik.handleChange}
+        >
+          {datesBetween.length > 0 ? (
+            datesBetween.map((date, index) => {
+              let timeSlot =
+                moment(date).format("hh:mm A") +
+                " - " +
+                moment(date).add(15, "minutes").format("hh:mm A");
+              return (
+                <MenuItem value={timeSlot} key={index.toString()}>
+                  {timeSlot}
+                </MenuItem>
+              );
+            })
+          ) : (
+            <MenuItem value="">No time available</MenuItem>
+          )}
+        </Select>
+      </FormControl>
+    );
+  };
 
   const renderForm = () => {
     return (
@@ -107,21 +161,7 @@ const EditSchedules = ({ schedule }) => {
                 />
               )}
             />
-            <TimePicker
-              label="Booking time"
-              value={formik.values.bookedTime}
-              onChange={(newValue) => {
-                formik.setFieldValue("bookedTime", newValue);
-                console.log(newValue);
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  error={Boolean(formik.touched.bookedTime && formik.errors.bookedTime)}
-                />
-              )}
-            />
+            {renderTimeSelect()}
           </Stack>
         </LocalizationProvider>
 
@@ -139,7 +179,7 @@ const EditSchedules = ({ schedule }) => {
         </FormGroup>
 
         <Box sx={{ py: 2 }} textAlign="right">
-          <Button color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
+          <Button color="primary" disabled={submitting} type="submit" variant="contained">
             Submit
           </Button>
         </Box>
@@ -150,16 +190,8 @@ const EditSchedules = ({ schedule }) => {
     <Container>
       <h1>Edit Schedules</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink underline="hover" color="inherit">
-            Home
-          </StyleLink>
-        </Link>
-        <Link href="/schedules">
-          <StyleLink underline="hover" color="inherit">
-            Schedules
-          </StyleLink>
-        </Link>
+        <Link href="/">Home </Link>
+        <Link href="/schedules">Schedules </Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
           Edit Schedules
         </StyleLink>

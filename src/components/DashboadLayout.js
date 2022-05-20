@@ -4,10 +4,11 @@ import Router from "next/router";
 import NProgress from "nprogress";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { DashboardNavbar } from "./dashboard-navbar";
-import { DashboardSidebar } from "./dashboard-sidebar";
+import { DashboardNavbar } from "./DashboardNavbar";
+import { DashboardSidebar } from "./DashboardSidebar";
+import { ToastContainer } from "material-react-toastify";
 import "nprogress/nprogress.css";
-import { ToastContainer } from "react-toastify";
+import "material-react-toastify/dist/ReactToastify.css";
 
 Router.onRouteChangeStart = () => NProgress.start();
 Router.onRouteChangeComplete = () => NProgress.done();
@@ -29,6 +30,7 @@ export const DashboardLayout = (props) => {
 
   return (
     <>
+      {" "}
       <ToastContainer />
       <DashboardLayoutRoot>
         <Box

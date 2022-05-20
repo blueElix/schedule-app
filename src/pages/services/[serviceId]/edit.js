@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Container, Breadcrumbs, Link as StyleLink, Box, Button, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -6,10 +7,12 @@ import Link from "next/link";
 import { DashboardLayout } from "../../../components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import { services } from "src/__mocks__/services";
-import { useEffect } from "react";
 import Loader from "../../../components/Loader/Loader";
+import { toastMsg } from "../../../helpers/toast";
 
 const EditServices = ({ service }) => {
+  const [submitting, setSubmitting] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -19,8 +22,15 @@ const EditServices = ({ service }) => {
       name: Yup.string().required("Services name is required."),
       description: Yup.string(),
     }),
-    onSubmit: () => {
-      alert();
+    onSubmit: (values) => {
+      try {
+        setSubmitting(true);
+        console.log(values);
+        setSubmitting(false);
+        toastMsg("success", "Successfully updated services.");
+      } catch (error) {
+        toastMsg("error", "Something went wrong.");
+      }
     },
   });
 
@@ -28,6 +38,8 @@ const EditServices = ({ service }) => {
     if (service) {
       formik.setFieldValue("name", service.name);
       formik.setFieldValue("description", service.description);
+    } else {
+      toastMsg("error", `Selected services didn't load.`);
     }
   }, []);
 
@@ -63,8 +75,8 @@ const EditServices = ({ service }) => {
           rows={4}
         />
         <Box sx={{ py: 2 }} textAlign="right">
-          <Button color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
-            {formik.isSubmitting ? "Submitting" : "Submit"}
+          <Button color="primary" disabled={submitting} type="submit" variant="contained">
+            Submit
           </Button>
         </Box>
       </form>
@@ -75,17 +87,13 @@ const EditServices = ({ service }) => {
     <Container>
       <h1>Edit Service</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <StyleLink underline="hover" color="inherit">
-          <Link href="/">Home </Link>
-        </StyleLink>
-        <StyleLink underline="hover" color="inherit">
-          <Link href="/services">Services </Link>
-        </StyleLink>
+        <Link href="/">Home </Link>
+        <Link href="/services">Services </Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
           Edit Service
         </StyleLink>
       </Breadcrumbs>
-      {service ? <Loader /> : renderForm()}
+      {!service ? <Loader /> : renderForm()}
     </Container>
   );
 };

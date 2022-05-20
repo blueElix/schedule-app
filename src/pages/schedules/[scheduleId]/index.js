@@ -1,4 +1,4 @@
-import { Container, Breadcrumbs, Link as StyleLink } from "@mui/material";
+import { Container, Breadcrumbs, Link as StyleLink, Button } from "@mui/material";
 import Link from "next/link";
 
 import { DashboardLayout } from "../../../components/DashboadLayout";
@@ -12,16 +12,8 @@ const SchedulesDetails = ({ schedule }) => {
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <Link href="/">
-          <StyleLink underline="hover" color="inherit">
-            Home
-          </StyleLink>
-        </Link>
-        <Link href="/schedules">
-          <StyleLink underline="hover" color="inherit">
-            Schedules
-          </StyleLink>
-        </Link>
+        <Link href="/">Home</Link>
+        <Link href="/schedules">Schedules</Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
           Details
         </StyleLink>

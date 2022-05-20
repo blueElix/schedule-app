@@ -9,7 +9,7 @@ import SchedulesTable from "src/components/SchedulesTable/SchedulesTable";
 import SearchForm from "src/components/SearchForm/SearchForm";
 import Loader from "src/components/Loader/Loader";
 
-const Dashboard = (props) => {
+const Schedules = (props) => {
   const [schedules, setSchedules] = useState(props.schedules);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -42,7 +42,7 @@ const Dashboard = (props) => {
   );
 };
 
-Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+Schedules.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
   return {
@@ -52,4 +52,4 @@ const getProps = async (ctx) => {
 
 export const getServerSideProps = withAdmin(getProps);
 
-export default Dashboard;
+export default Schedules;

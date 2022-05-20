@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Container,
   Breadcrumbs,
@@ -20,12 +21,17 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import InputMask from "react-input-mask";
+import { useRouter } from "next/router";
 
 import { DashboardLayout } from "../../components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 import { services } from "src/__mocks__/services";
+import { toastMsg } from "../../helpers/toast";
 
 const CreateStaffs = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -44,7 +50,20 @@ const CreateStaffs = () => {
       type: Yup.string().required("Staff type is required."),
       role: Yup.string(),
     }),
-    onSubmit: () => {},
+    onSubmit: (values, { resetForm }) => {
+      try {
+        setSubmitting(true);
+        console.log(values);
+        setTimeout(() => {
+          setSubmitting(false);
+          router.push("/staffs");
+          resetForm();
+          toastMsg("success", "Successfully created staff.");
+        }, 300);
+      } catch (error) {
+        toastMsg("error", "Something went wrong.");
+      }
+    },
   });
 
   const renderForm = () => {
@@ -85,6 +104,7 @@ const CreateStaffs = () => {
             value={formik.values.type}
             onChange={formik.handleChange}
           >
+            <FormControlLabel value="service-staff" control={<Radio />} label="Service Staff" />
             <FormControlLabel value="barangay-staff" control={<Radio />} label="Barangay Staff" />
             <FormControlLabel value="staff" control={<Radio />} label="Staff" />
           </RadioGroup>
@@ -134,7 +154,7 @@ const CreateStaffs = () => {
         </FormControl>
 
         <Box sx={{ py: 2 }} textAlign="right">
-          <Button color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
+          <Button color="primary" disabled={submitting} type="submit" variant="contained">
             Submit
           </Button>
         </Box>
@@ -146,16 +166,8 @@ const CreateStaffs = () => {
     <Container>
       <h1>Create Staffs</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink underline="hover" color="inherit">
-            Home
-          </StyleLink>
-        </Link>
-        <Link href="/staffs">
-          <StyleLink underline="hover" color="inherit">
-            Staffs
-          </StyleLink>
-        </Link>
+        <Link href="/">Home</Link>
+        <Link href="/staffs">Staffs</Link>
         <StyleLink underline="hover" color="text.primary" aria-current="page">
           Create Staffs
         </StyleLink>
