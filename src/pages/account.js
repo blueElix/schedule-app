@@ -1,7 +1,6 @@
-import Head from "next/head";
-import { Box, Container, Grid, Typography } from "@mui/material";
-import { AccountProfile } from "../components/account/account-profile";
-import { AccountProfileDetails } from "../components/account/account-profile-details";
+import { Container, Grid, Typography } from "@mui/material";
+import { AccountProfile } from "../components/Account/AccountProfile";
+import { AccountProfileDetails } from "../components/Account/AccountProfileDetails";
 import { DashboardLayout } from "../components/DashboadLayout";
 
 const Account = () => (

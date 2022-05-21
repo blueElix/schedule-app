@@ -26,6 +26,7 @@ import { useRouter } from "next/router";
 import { DashboardLayout } from "../../components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 import { services } from "src/__mocks__/services";
+import { barangays } from "src/__mocks__/barangays";
 import { toastMsg } from "../../helpers/toast";
 
 const CreateStaffs = () => {
@@ -38,6 +39,8 @@ const CreateStaffs = () => {
       email: "",
       contact: "",
       type: "",
+      services: "",
+      barangays: "",
       role: "",
     },
     validationSchema: Yup.object({
@@ -48,6 +51,8 @@ const CreateStaffs = () => {
         .max(255)
         .required("Staff email is required"),
       type: Yup.string().required("Staff type is required."),
+      services: Yup.string(),
+      barangays: Yup.string(),
       role: Yup.string(),
     }),
     onSubmit: (values, { resetForm }) => {
@@ -131,27 +136,53 @@ const CreateStaffs = () => {
           )}
         </InputMask>
 
-        <FormControl fullWidth margin="normal">
-          <InputLabel id="selectRole">Role</InputLabel>
-          <Select
-            labelId="selectRole"
-            id="demo-simple-select"
-            value={formik.values.role}
-            label="Role"
-            name="role"
-            onChange={formik.handleChange}
-          >
-            {Array.isArray(services) && services.length > 0 ? (
-              services.map((service) => (
-                <MenuItem value={service.id} key={service.id}>
-                  {service.name}
-                </MenuItem>
-              ))
-            ) : (
-              <MenuItem value="">No role available</MenuItem>
-            )}
-          </Select>
-        </FormControl>
+        {formik.values.type === "service-staff" && (
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="selectServices">Services</InputLabel>
+            <Select
+              labelId="selectServices"
+              id="demo-simple-select"
+              value={formik.values.services}
+              label="Services"
+              name="services"
+              onChange={formik.handleChange}
+            >
+              {Array.isArray(services) && services.length > 0 ? (
+                services.map((service) => (
+                  <MenuItem value={service.id} key={service.id}>
+                    {service.name}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem value="">No services available</MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        )}
+
+        {formik.values.type === "barangay-staff" && (
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="selectBarangay">Barangay</InputLabel>
+            <Select
+              labelId="selectBarangay"
+              id="demo-simple-select"
+              value={formik.values.barangays}
+              label="Barangay"
+              name="barangays"
+              onChange={formik.handleChange}
+            >
+              {Array.isArray(barangays) && barangays.length > 0 ? (
+                barangays.map((barangay) => (
+                  <MenuItem value={barangay.id} key={barangay.id}>
+                    {barangay.name}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem value="">No barangay available</MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        )}
 
         <Box sx={{ py: 2 }} textAlign="right">
           <Button color="primary" disabled={submitting} type="submit" variant="contained">

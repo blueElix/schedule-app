@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
-import { AppBar, Avatar, Box, IconButton, Toolbar, Button } from "@mui/material";
+import { AppBar, Avatar, Box, IconButton, Toolbar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { UserCircle as UserCircleIcon } from "../icons/user-circle";
 

@@ -12,6 +12,7 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
+import useLocalStorage from "src/hooks/useLocalStorage";
 import { logout } from "src/helpers/auth";
 
 import { Logo } from "./logo";
@@ -55,9 +56,23 @@ const adminLinks = [
   },
 ];
 
+const staffLinks = [
+  {
+    href: "/bookings",
+    icon: <MenuBookIcon fontSize="small" />,
+    title: "Bookings",
+  },
+  {
+    href: "/account",
+    icon: <AccountCircleIcon fontSize="small" />,
+    title: "Profile",
+  },
+];
+
 export const DashboardSidebar = (props) => {
   const { open, onClose } = props;
   const router = useRouter();
+  const [user] = useLocalStorage("user");
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"), {
     defaultMatches: true,
     noSsr: false,
@@ -101,9 +116,18 @@ export const DashboardSidebar = (props) => {
           </Box>
         </div>
         <Box sx={{ flexGrow: 1 }}>
-          {adminLinks.map((item) => (
-            <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
-          ))}
+          {user &&
+            (user.role === "superadmin" || user.role === "admin") &&
+            adminLinks.map((item) => (
+              <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
+            ))}
+
+          {user &&
+            user.role == "user" &&
+            (user.type === "barangay-staff" || user.type === "service-staff") &&
+            staffLinks.map((item) => (
+              <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
+            ))}
           <NavItem
             icon={<ExitToAppIcon fontSize="small" />}
             title="Logout"

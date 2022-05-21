@@ -51,8 +51,8 @@ User Ex
 > Loading
 
 Pages
-> Services view
-> Baranggay view
+> Services view -> just view booking
+> Baranggay view -> can add/edit/delete/view booking
 
 
 MENU
@@ -66,9 +66,16 @@ MENU
     - Profile
     - Logout
 
-> Barangay Staff
+> Barangay Staff/Services
     - Booking
+        -> Barangay staff -> filter by userType and barangayId
+        -> Services -> filter by userType and servicesId 
     - Profile
     - Logout
+
+> Create Staff
+    -> Type
+        -> Barangay Staff -> choose baranggay
+        -> Service Staff -> choose services 
 
 

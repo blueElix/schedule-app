@@ -3,7 +3,6 @@ import Router from "next/router";
 // import axios from "axios";
 // import { API } from "../config";
 import { users } from "../__mocks__/users";
-import useLocalStorage from "src/hooks/useLocalStorage";
 
 // set in cookie
 export const setCookie = (key, value) => {
@@ -97,6 +96,9 @@ export const updateUser = (user, cb) => {
 export const withAdmin = (gssp) => {
   return async (ctx) => {
     const token = getCookie("token", ctx.req);
+    // let user = null
+
+    // remove this when have api
     let user = users[0];
 
     // if (token) {
