@@ -1,8 +1,8 @@
 import cookie from "js-cookie";
 import Router from "next/router";
 // import axios from "axios";
-// import { API } from "../config";
 import { users } from "../__mocks__/users";
+import { getUserDetails } from "src/api";
 
 // set in cookie
 export const setCookie = (key, value) => {
@@ -96,26 +96,17 @@ export const updateUser = (user, cb) => {
 export const withAdmin = (gssp) => {
   return async (ctx) => {
     const token = getCookie("token", ctx.req);
-    // let user = null
+    let user = null;
 
-    // remove this when have api
-    let user = users[0];
-
-    // if (token) {
-    //   try {
-    //     const response = await axios.get(`${API}/users/me`, {
-    //       headers: {
-    //         'Authorization': `Bearer ${token}`,
-    //       }
-    //     });
-
-    //     user = response.data.data;
-    //   } catch (error) {
-    //     if (error.response.status === 401) {
-    //       user = null;
-    //     }
-    //   }
-    // }
+    if (token) {
+      try {
+        const { data: _user } = await getUserDetails(token);
+        user = _user.user;
+      } catch (error) {
+        user = null;
+        console.log(error);
+      }
+    }
 
     if (user === null || (user.role !== "superadmin" && user.role !== "admin")) {
       // redirect
@@ -139,24 +130,17 @@ export const withAdmin = (gssp) => {
 export const withUser = (gssp) => {
   return async (ctx) => {
     const token = getCookie("token", ctx.req);
-    let user = users[1];
+    let user = null;
 
-    // if (token) {
-    //   try {
-    //     const response = await axios.get(`${API}/users/me`, {
-    //       headers: {
-    //         'Authorization': `Bearer ${token}`,
-    //       }
-    //     });
-
-    //     user = response.data.data;
-    //   } catch (error) {
-    //     if (error.response.status === 401) {
-    //       user = null;
-    //     }
-    //   }
-    // }
-
+    if (token) {
+      try {
+        const { data: _user } = await getUserDetails(token);
+        user = _user.user;
+      } catch (error) {
+        user = null;
+        console.log(error);
+      }
+    }
     if (user === null) {
       // redirect
 

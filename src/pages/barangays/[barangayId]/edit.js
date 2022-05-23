@@ -7,12 +7,13 @@ import Link from "next/link";
 import { DashboardLayout } from "../../../components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import { toastMsg } from "../../../helpers/toast";
-
-import { barangays } from "src/__mocks__/barangays";
+import { getBarangay, updateBarangay } from "src/api";
+import useLocalStorage from "src/hooks/useLocalStorage";
 import Loader from "../../../components/Loader/Loader";
 
-const EditBarangays = ({ barangay }) => {
+const EditBarangays = ({ barangay, currentId }) => {
   const [submitting, setSubmitting] = useState(false);
+  const [user] = useLocalStorage("user");
 
   const formik = useFormik({
     initialValues: {
@@ -23,12 +24,21 @@ const EditBarangays = ({ barangay }) => {
       name: Yup.string().required("Barangay name is required."),
       address: Yup.string(),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       try {
         setSubmitting(true);
-        console.log(values);
-        setSubmitting(false);
-        toastMsg("success", "Successfully updated barangay.");
+        if (user) {
+          await updateBarangay(currentId, values, {
+            headers: {
+              Authorization: `Bearer ${user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+          setTimeout(() => {
+            setSubmitting(false);
+            toastMsg("success", "Successfully updated barangay.");
+          }, 300);
+        }
       } catch (error) {
         toastMsg("error", "Something went wrong.");
       }
@@ -102,10 +112,11 @@ const EditBarangays = ({ barangay }) => {
 EditBarangays.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  const _barangay = barangays.find(({ id }) => id == ctx.query.barangayId);
+  const { data: _barangay } = await getBarangay(ctx.query.barangayId);
   return {
     props: {
-      barangay: _barangay,
+      barangay: _barangay[0],
+      currentId: ctx.query.barangayId,
     },
   };
 };

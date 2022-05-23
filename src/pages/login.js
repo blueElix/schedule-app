@@ -6,8 +6,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Box, Button, Container, Link, TextField, Typography } from "@mui/material";
 import { authenticate, isAuth } from "../helpers/auth";
-import { users } from "src/__mocks__/users";
 import useLocalStorage from "src/hooks/useLocalStorage";
+import { login } from "src/api";
+import { toastMsg } from "src/helpers/toast";
 
 const Login = () => {
   const router = useRouter();
@@ -19,23 +20,21 @@ const Login = () => {
       password: "Password1!",
     },
     validationSchema: Yup.object({
-      email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+      email: Yup.string().max(255).required("Email is required"),
       password: Yup.string().max(255).required("Password is required"),
     }),
-    onSubmit: (values) => {
-      if (
-        users.some(({ email, password }) => email === values.email && password === values.password)
-      ) {
-        const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyNzA5ZDgzMGUwYzBlMGQyOGEwYTU1YSIsImlhdCI6MTY1MjUxMDE5NiwiZXhwIjoxNjYwMjg2MTk2fQ.u8Lj9KMc1tlQAlsvKK5u6hNHrMUcxODmSlPn0HroJ4o";
-        const _user = users.find(({ email }) => email === values.email);
-        setUser(_user);
-
-        authenticate(token, () => {
-          isAuth() && (_user.role === "admin" || _user.role === "superadmin")
+    onSubmit: async (values) => {
+      try {
+        const { data: user } = await login({ email: values.email, password: values.password });
+        setUser(user);
+        authenticate(user.accessToken, () => {
+          isAuth() && (user.user.role === "admin" || user.user.role === "superadmin")
             ? router.push("/")
             : router.push("/bookings");
         });
+        toastMsg("success", user.message);
+      } catch (error) {
+        toastMsg("error", "Something went wrong, please contact your admin.");
       }
     },
   });
@@ -74,7 +73,7 @@ const Login = () => {
               name="email"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              type="email"
+              type="text"
               value={formik.values.email}
               variant="outlined"
             />

@@ -2,11 +2,13 @@ import { Container } from "@mui/material";
 import { DashboardLayout } from "../components/DashboadLayout";
 import { withAdmin } from "src/helpers/auth";
 
-const Dashboard = () => (
-  <Container>
-    <h1>Welcome</h1>
-  </Container>
-);
+const Dashboard = () => {
+  return (
+    <Container>
+      <h1>Welcome</h1>
+    </Container>
+  );
+};
 
 Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 

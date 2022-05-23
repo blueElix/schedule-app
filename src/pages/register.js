@@ -3,36 +3,50 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Container,
-  FormHelperText,
-  Link,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { ToastContainer } from "material-react-toastify";
+import "material-react-toastify/dist/ReactToastify.css";
+
+import { Box, Button, Container, Link, TextField, Typography } from "@mui/material";
+import { register } from "src/api";
+import { toastMsg } from "src/helpers/toast";
 
 const Register = () => {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
       email: "",
-      firstName: "",
-      lastName: "",
       password: "",
-      policy: false,
+      confirmPassword: "",
+      role: "user",
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-      firstName: Yup.string().max(255).required("First name is required"),
-      lastName: Yup.string().max(255).required("Last name is required"),
       password: Yup.string().max(255).required("Password is required"),
-      policy: Yup.boolean().oneOf([true], "This field must be checked"),
+      confirmPassword: Yup.string()
+        .required("Confirm Password is required.")
+        .oneOf([Yup.ref("password"), null], "Passwords must match."),
+      role: Yup.string(),
     }),
-    onSubmit: () => {
-      router.push("/");
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        const payload = {
+          email: values.email,
+          password: values.password,
+          role: values.role,
+        };
+
+        const res = await register(payload);
+        if (res) {
+          toastMsg(
+            "success",
+            "Successfully send your application, please check your email for confirmation"
+          );
+        }
+
+        resetForm();
+      } catch (error) {
+        toastMsg("error", "Something went wrong please contact your admin.");
+      }
     },
   });
 
@@ -50,6 +64,8 @@ const Register = () => {
           minHeight: "100%",
         }}
       >
+        <ToastContainer />
+
         <Container maxWidth="sm">
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
@@ -60,30 +76,6 @@ const Register = () => {
                 Use your email to create a new account
               </Typography>
             </Box>
-            <TextField
-              error={Boolean(formik.touched.firstName && formik.errors.firstName)}
-              fullWidth
-              helperText={formik.touched.firstName && formik.errors.firstName}
-              label="First Name"
-              margin="normal"
-              name="firstName"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.firstName}
-              variant="outlined"
-            />
-            <TextField
-              error={Boolean(formik.touched.lastName && formik.errors.lastName)}
-              fullWidth
-              helperText={formik.touched.lastName && formik.errors.lastName}
-              label="Last Name"
-              margin="normal"
-              name="lastName"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.lastName}
-              variant="outlined"
-            />
             <TextField
               error={Boolean(formik.touched.email && formik.errors.email)}
               fullWidth
@@ -110,34 +102,24 @@ const Register = () => {
               value={formik.values.password}
               variant="outlined"
             />
-            <Box
-              sx={{
-                alignItems: "center",
-                display: "flex",
-                ml: -1,
-              }}
-            >
-              <Checkbox
-                checked={formik.values.policy}
-                name="policy"
-                onChange={formik.handleChange}
-              />
-              <Typography color="textSecondary" variant="body2">
-                I have read the{" "}
-                <NextLink href="#" passHref>
-                  <Link color="primary" underline="always" variant="subtitle2">
-                    Terms and Conditions
-                  </Link>
-                </NextLink>
-              </Typography>
-            </Box>
-            {Boolean(formik.touched.policy && formik.errors.policy) && (
-              <FormHelperText error>{formik.errors.policy}</FormHelperText>
-            )}
+            <TextField
+              error={Boolean(formik.touched.confirmPassword && formik.errors.confirmPassword)}
+              fullWidth
+              helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+              label="Confirm Password"
+              margin="normal"
+              name="confirmPassword"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              type="password"
+              value={formik.values.confirmPassword}
+              variant="outlined"
+            />
+
             <Box sx={{ py: 2 }}>
               <Button
                 color="primary"
-                disabled={formik.isSubmitting}
+                // disabled={formik.isSubmitting}
                 fullWidth
                 size="large"
                 type="submit"

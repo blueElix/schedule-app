@@ -14,14 +14,42 @@ import EditIcon from "@mui/icons-material/Edit";
 import useModalState from "src/hooks/useModalState";
 import DeletingModal from "../Modal/DeletingModal";
 import { useState } from "react";
+import { deleteBarangay } from "src/api";
+import useLocalStorage from "src/hooks/useLocalStorage";
+import { toastMsg } from "src/helpers/toast";
 
 const BarangaysTable = ({ barangays, setBarangays }) => {
   const { show, handleClose, handleShow } = useModalState();
   const [selectedId, setSelectedId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [user] = useLocalStorage("user");
 
   if (!Array.isArray(barangays)) {
     return null;
   }
+
+  const handleDeleteBarangay = async () => {
+    try {
+      setIsDeleting(true);
+      if (user) {
+        await deleteBarangay(selectedId, {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+        setTimeout(() => {
+          setSelectedId(null);
+          setBarangays(barangays.filter((barangay) => barangay.id !== selectedId));
+          setIsDeleting(false);
+          handleClose();
+          toastMsg("success", "Successfully deleted barangay.");
+        }, 300);
+      }
+    } catch (error) {
+      toastMsg("error", "Something went wrong on deleting.");
+    }
+  };
 
   return (
     <>
@@ -31,11 +59,7 @@ const BarangaysTable = ({ barangays, setBarangays }) => {
           handleClose();
           setSelectedId(null);
         }}
-        confirmDelete={() => {
-          setBarangays(barangays.filter((barangay) => barangay.id !== selectedId));
-          handleClose();
-          setSelectedId(null);
-        }}
+        confirmDelete={handleDeleteBarangay}
         title="Delete Barangay"
         content="Are you sure you want to delete this barangay?"
         deleting={false}

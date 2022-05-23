@@ -3,8 +3,8 @@ import Link from "next/link";
 
 import { DashboardLayout } from "../../../components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
-import { barangays } from "src/__mocks__/barangays";
 import Loader from "../../../components/Loader/Loader";
+import { getBarangay } from "src/api";
 
 const BarangaysDetails = ({ barangay }) => {
   return (
@@ -32,10 +32,10 @@ const BarangaysDetails = ({ barangay }) => {
 BarangaysDetails.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  const _barangay = barangays.find(({ id }) => id == ctx.query.barangayId);
+  const { data: _barangay } = await getBarangay(ctx.query.barangayId);
   return {
     props: {
-      barangay: _barangay,
+      barangay: _barangay[0],
     },
   };
 };

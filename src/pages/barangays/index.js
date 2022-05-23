@@ -8,6 +8,7 @@ import { barangays as _barangays } from "src/__mocks__/barangays";
 import BarangaysTable from "src/components/BarangaysTable/BarangaysTable";
 import SearchForm from "src/components/SearchForm/SearchForm";
 import Loader from "src/components/Loader/Loader";
+import { getBarangays } from "src/api";
 
 const Dashboard = (props) => {
   const [barangays, setBarangays] = useState(props.barangays);
@@ -45,6 +46,7 @@ const Dashboard = (props) => {
 Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
+  const { data: _barangays } = await getBarangays();
   return {
     props: { barangays: _barangays },
   };

@@ -117,14 +117,14 @@ export const DashboardSidebar = (props) => {
         </div>
         <Box sx={{ flexGrow: 1 }}>
           {user &&
-            (user.role === "superadmin" || user.role === "admin") &&
+            (user.user.role === "superadmin" || user.user.role === "admin") &&
             adminLinks.map((item) => (
               <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
             ))}
 
           {user &&
-            user.role == "user" &&
-            (user.type === "barangay-staff" || user.type === "service-staff") &&
+            user.user.role == "user" &&
+            (user.user.type === "barangay-staff" || user.user.type === "service-staff") &&
             staffLinks.map((item) => (
               <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
             ))}

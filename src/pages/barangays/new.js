@@ -9,9 +9,13 @@ import { useRouter } from "next/router";
 import { DashboardLayout } from "../../components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 import { toastMsg } from "../../helpers/toast";
+import { createBarangay } from "src/api";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 const CreateBarangays = () => {
   const [submitting, setSubmitting] = useState(false);
+  const [user] = useLocalStorage("user");
+
   const router = useRouter();
 
   const formik = useFormik({
@@ -23,17 +27,24 @@ const CreateBarangays = () => {
       name: Yup.string().required("Barangay name is required."),
       address: Yup.string(),
     }),
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       try {
         setSubmitting(true);
-        console.log(values);
-
-        setTimeout(() => {
-          setSubmitting(false);
-          resetForm();
-          router.push("/barangays");
-          toastMsg("success", "Successfully created barangay.");
-        }, 300);
+        if (user) {
+          const res = await createBarangay(values, {
+            headers: {
+              Authorization: `Bearer ${user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+          console.log(res);
+          setTimeout(() => {
+            setSubmitting(false);
+            resetForm();
+            router.push("/barangays");
+            toastMsg("success", "Successfully created barangay.");
+          }, 300);
+        }
       } catch (error) {
         toastMsg("error", "Something went wrong.");
       }
