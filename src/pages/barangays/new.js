@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { Container, Breadcrumbs, Link as StyleLink, Box, Button, TextField } from "@mui/material";
+import { Container, Breadcrumbs, Link as MuiLink, Box, Button, TextField } from "@mui/material";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { DashboardLayout } from "../../components/DashboadLayout";
-import { withAdmin } from "../../helpers/auth";
-import { toastMsg } from "../../helpers/toast";
 import { createBarangay } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";
+import { toastMsg } from "src/helpers/toast";
+import { withAdmin } from "../../helpers/auth";
+import { DashboardLayout } from "src/components/DashboadLayout";
+import StyleLink from "src/components/StyleLink/StyleLink";
 
 const CreateBarangays = () => {
   const [submitting, setSubmitting] = useState(false);
@@ -94,11 +95,21 @@ const CreateBarangays = () => {
     <Container>
       <h1>Create Barangay</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">Home</Link>
-        <Link href="/barangays">Barangays </Link>
-        <StyleLink underline="hover" color="text.primary" aria-current="page">
+        <Link href="/">
+          <StyleLink>Home</StyleLink>
+        </Link>
+        <Link href="/barangays">
+          <StyleLink>Barangays</StyleLink>
+        </Link>
+        <MuiLink
+          color="text.primary"
+          aria-current="page"
+          sx={{
+            textDecoration: "none",
+          }}
+        >
           Create Barangay
-        </StyleLink>
+        </MuiLink>
       </Breadcrumbs>
       {renderForm()}
     </Container>

@@ -14,6 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import useModalState from "src/hooks/useModalState";
 import DeletingModal from "../Modal/DeletingModal";
 import { useState } from "react";
+import StyleLink from "../StyleLink/StyleLink";
 
 const StaffsTable = ({ staffs, setStaffs }) => {
   const { show, handleClose, handleShow } = useModalState();
@@ -61,7 +62,9 @@ const StaffsTable = ({ staffs, setStaffs }) => {
                 <TableRow key={staff.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell component="th">{index + 1}</TableCell>
                   <TableCell scope="row">
-                    <Link href={`staffs/${staff.id}`}>{staff.name}</Link>
+                    <Link href={`staffs/${staff.id}`}>
+                      <StyleLink>{staff.name}</StyleLink>
+                    </Link>
                   </TableCell>
                   <TableCell>{staff.role}</TableCell>
                   <TableCell>{staff.email}</TableCell>

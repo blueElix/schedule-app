@@ -2,7 +2,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Container, Stack, Button } from "@mui/material";
 
-import { DashboardLayout } from "../../components/DashboadLayout";
+import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 import { schedules as _schedules } from "src/__mocks__/schedules";
 import SchedulesTable from "src/components/SchedulesTable/SchedulesTable";

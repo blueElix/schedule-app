@@ -1,9 +1,10 @@
-import { Container, Breadcrumbs, Link as StyleLink } from "@mui/material";
+import { Container, Breadcrumbs, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
 
-import { DashboardLayout } from "../../../components/DashboadLayout";
+import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
-import Loader from "../../../components/Loader/Loader";
+import Loader from "src/components/Loader/Loader";
+import StyleLink from "src/components/StyleLink/StyleLink";
 import { getBarangay } from "src/api";
 
 const BarangaysDetails = ({ barangay }) => {
@@ -11,11 +12,21 @@ const BarangaysDetails = ({ barangay }) => {
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <Link href="/">Home</Link>
-        <Link href="/barangays">Barangays</Link>
-        <StyleLink underline="hover" color="text.primary" aria-current="page">
+        <Link href="/">
+          <StyleLink>Home</StyleLink>
+        </Link>
+        <Link href="/barangays">
+          <StyleLink> Barangays</StyleLink>
+        </Link>
+        <MuiLink
+          color="text.primary"
+          aria-current="page"
+          sx={{
+            textDecoration: "none",
+          }}
+        >
           Details
-        </StyleLink>
+        </MuiLink>
       </Breadcrumbs>
       {!barangay ? (
         <Loader />

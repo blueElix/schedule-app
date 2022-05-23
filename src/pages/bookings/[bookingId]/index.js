@@ -1,18 +1,20 @@
 import { useRef } from "react";
-import { Container, Breadcrumbs, Link as StyleLink, Button } from "@mui/material";
+import { Container, Breadcrumbs, Link as MuiLink, Button } from "@mui/material";
 import Link from "next/link";
 import { useReactToPrint } from "react-to-print";
 
-import { DashboardLayout } from "../../../components/DashboadLayout";
+import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import { bookings } from "src/__mocks__/bookings";
 import { schedules as _schedules } from "src/__mocks__/schedules";
 import { services as _services } from "src/__mocks__/services";
-import Loader from "../../../components/Loader/Loader";
+import Loader from "src/components/Loader/Loader";
+import StyleLink from "src/components/StyleLink/StyleLink";
 
 const BookingsDetails = ({ booking }) => {
   const schedule = _schedules.find(({ id }) => id == booking.schedule);
   const componentRef = useRef();
+
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -21,11 +23,21 @@ const BookingsDetails = ({ booking }) => {
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <Link href="/">Home </Link>
-        <Link href="/bookings">Bookings </Link>
-        <StyleLink underline="hover" color="text.primary" aria-current="page">
+        <Link href="/">
+          <StyleLink>Home</StyleLink>
+        </Link>
+        <Link href="/bookings">
+          <StyleLink>Bookings </StyleLink>
+        </Link>
+        <MuiLink
+          color="text.primary"
+          aria-current="page"
+          sx={{
+            textDecoration: "none",
+          }}
+        >
           Details
-        </StyleLink>
+        </MuiLink>
       </Breadcrumbs>
 
       {!booking ? (

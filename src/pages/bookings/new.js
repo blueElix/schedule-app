@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   Container,
   Breadcrumbs,
-  Link as StyleLink,
+  Link as MuiLink,
   Box,
   Button,
   TextField,
@@ -18,11 +18,12 @@ import Link from "next/link";
 import InputMask from "react-input-mask";
 import { useRouter } from "next/router";
 
-import { DashboardLayout } from "../../components/DashboadLayout";
+import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 import { services } from "src/__mocks__/services";
 import { schedules } from "src/__mocks__/schedules";
-import { toastMsg } from "../../helpers/toast";
+import { toastMsg } from "src/helpers/toast";
+import StyleLink from "src/components/StyleLink/StyleLink";
 
 const CreateBookings = () => {
   const [submitting, setSubmitting] = useState(false);
@@ -191,11 +192,21 @@ const CreateBookings = () => {
     <Container>
       <h1>Create Booking</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">Home</Link>
-        <Link href="/bookings">Bookings</Link>
-        <StyleLink underline="hover" color="text.primary" aria-current="page">
+        <Link href="/">
+          <StyleLink>Home</StyleLink>
+        </Link>
+        <Link href="/bookings">
+          <StyleLink>Bookings</StyleLink>
+        </Link>
+        <MuiLink
+          color="text.primary"
+          aria-current="page"
+          sx={{
+            textDecoration: "none",
+          }}
+        >
           Create Booking
-        </StyleLink>
+        </MuiLink>
       </Breadcrumbs>
       {renderForm()}
     </Container>

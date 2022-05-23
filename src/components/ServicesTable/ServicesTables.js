@@ -17,6 +17,7 @@ import DeletingModal from "../Modal/DeletingModal";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import { toastMsg } from "src/helpers/toast";
 import { deleteService } from "src/api";
+import StyleLink from "../StyleLink/StyleLink";
 
 const ServicesTable = ({ services, setServices }) => {
   const { show, handleClose, handleShow } = useModalState();
@@ -82,7 +83,9 @@ const ServicesTable = ({ services, setServices }) => {
               >
                 <TableCell component="th">{index + 1}</TableCell>
                 <TableCell scope="row">
-                  <Link href={{ pathname: `/services/${service.id}` }}>{service.name}</Link>
+                  <Link href={{ pathname: `/services/${service.id}` }}>
+                    <StyleLink>{service.name}</StyleLink>
+                  </Link>
                 </TableCell>
                 <TableCell>{service.description}</TableCell>
                 <TableCell width="150px">

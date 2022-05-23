@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   Container,
   Breadcrumbs,
-  Link as StyleLink,
+  Link as MuiLink,
   Box,
   Button,
   TextField,
@@ -25,10 +25,11 @@ import Link from "next/link";
 import moment from "moment";
 import { useRouter } from "next/router";
 
-import { DashboardLayout } from "../../components/DashboadLayout";
+import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 import { services } from "src/__mocks__/services";
-import { toastMsg } from "../../helpers/toast";
+import { toastMsg } from "src/helpers/toast";
+import StyleLink from "src/components/StyleLink/StyleLink";
 
 const CreateSchedules = () => {
   const [submitting, setSubmitting] = useState(false);
@@ -183,11 +184,21 @@ const CreateSchedules = () => {
     <Container>
       <h1>Create Schedules</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">Home </Link>
-        <Link href="/schedules">Schedules </Link>
-        <StyleLink underline="hover" color="text.primary" aria-current="page">
+        <Link href="/">
+          <StyleLink>Home</StyleLink>
+        </Link>
+        <Link href="/schedules">
+          <StyleLink>Schedules</StyleLink>
+        </Link>
+        <MuiLink
+          color="text.primary"
+          aria-current="page"
+          sx={{
+            textDecoration: "none",
+          }}
+        >
           Create Schedules
-        </StyleLink>
+        </MuiLink>
       </Breadcrumbs>
       {renderForm()}
     </Container>

@@ -1,21 +1,32 @@
-import { Container, Breadcrumbs, Link as StyleLink } from "@mui/material";
+import { Container, Breadcrumbs, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
 
-import { DashboardLayout } from "../../../components/DashboadLayout";
+import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import { getService } from "src/api";
-import Loader from "../../../components/Loader/Loader";
+import Loader from "src/components/Loader/Loader";
+import StyleLink from "src/components/StyleLink/StyleLink";
 
 const ServicesDetails = ({ service }) => {
   return (
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <Link href="/">Home</Link>
-        <Link href="/services">Services</Link>
-        <StyleLink underline="hover" color="text.primary" aria-current="page">
+        <Link href="/">
+          <StyleLink>Home</StyleLink>
+        </Link>
+        <Link href="/services">
+          <StyleLink>Services</StyleLink>
+        </Link>
+        <MuiLink
+          color="text.primary"
+          aria-current="page"
+          sx={{
+            textDecoration: "none",
+          }}
+        >
           Details
-        </StyleLink>
+        </MuiLink>
       </Breadcrumbs>
 
       {!service ? (

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Container,
   Breadcrumbs,
-  Link as StyleLink,
+  Link as MuiLink,
   Box,
   Button,
   TextField,
@@ -22,12 +22,13 @@ import * as Yup from "yup";
 import Link from "next/link";
 import InputMask from "react-input-mask";
 
-import { DashboardLayout } from "../../../components/DashboadLayout";
+import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import { users } from "src/__mocks__/users";
 import { services } from "src/__mocks__/services";
-import { toastMsg } from "../../../helpers/toast";
-import Loader from "../../../components/Loader/Loader";
+import { toastMsg } from "src/helpers/toast";
+import Loader from "src/components/Loader/Loader";
+import StyleLink from "src/components/StyleLink/StyleLink";
 
 const EditStaffs = ({ staff }) => {
   const [submitting, setSubmitting] = useState(false);
@@ -159,11 +160,21 @@ const EditStaffs = ({ staff }) => {
     <Container>
       <h1>Edit Staff</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">Home </Link>
-        <Link href="/staffs">Staffs </Link>
-        <StyleLink underline="hover" color="text.primary" aria-current="page">
+        <Link href="/">
+          <StyleLink>Home</StyleLink>
+        </Link>
+        <Link href="/staffs">
+          <StyleLink>Staffs</StyleLink>
+        </Link>
+        <MuiLink
+          color="text.primary"
+          aria-current="page"
+          sx={{
+            textDecoration: "none",
+          }}
+        >
           Edit Staff
-        </StyleLink>
+        </MuiLink>
       </Breadcrumbs>
       {!staff ? <Loader /> : renderForm()}
     </Container>

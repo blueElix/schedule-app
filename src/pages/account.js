@@ -2,6 +2,7 @@ import { Container, Grid, Typography } from "@mui/material";
 import { AccountProfile } from "../components/Account/AccountProfile";
 import { AccountProfileDetails } from "../components/Account/AccountProfileDetails";
 import { DashboardLayout } from "../components/DashboadLayout";
+import { withUser } from "src/helpers/auth";
 
 const Account = () => (
   <>
@@ -23,4 +24,11 @@ const Account = () => (
 
 Account.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
+const getProps = async (ctx) => {
+  return {
+    props: {},
+  };
+};
+
+export const getServerSideProps = withUser(getProps);
 export default Account;

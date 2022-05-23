@@ -1,21 +1,32 @@
-import { Container, Breadcrumbs, Link as StyleLink } from "@mui/material";
+import { Container, Breadcrumbs, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
 
-import { DashboardLayout } from "../../../components/DashboadLayout";
+import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import { users } from "src/__mocks__/users";
-import Loader from "../../../components/Loader/Loader";
+import Loader from "src/components/Loader/Loader";
+import StyleLink from "src/components/StyleLink/StyleLink";
 
 const StaffsDetails = ({ staff }) => {
   return (
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <Link href="/">Home</Link>
-        <Link href="/staffs">Staffs</Link>
-        <StyleLink underline="hover" color="text.primary" aria-current="page">
+        <Link href="/">
+          <StyleLink>Home</StyleLink>
+        </Link>
+        <Link href="/staffs">
+          <StyleLink>Staffs</StyleLink>
+        </Link>
+        <MuiLink
+          color="text.primary"
+          aria-current="page"
+          sx={{
+            textDecoration: "none",
+          }}
+        >
           Details
-        </StyleLink>
+        </MuiLink>
       </Breadcrumbs>
 
       {!staff ? (

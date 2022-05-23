@@ -15,6 +15,7 @@ import useModalState from "src/hooks/useModalState";
 import DeletingModal from "../Modal/DeletingModal";
 import { useState } from "react";
 import { services } from "src/__mocks__/services";
+import StyleLink from "../StyleLink/StyleLink";
 
 const SchedulesTable = ({ schedules, setSchedules }) => {
   const { show, handleClose, handleShow } = useModalState();
@@ -65,7 +66,12 @@ const SchedulesTable = ({ schedules, setSchedules }) => {
                   <TableCell component="th">{index + 1}</TableCell>
                   <TableCell scope="row">
                     <Link href={{ pathname: `/schedules/${schedule.id}` }}>
-                      {services.find(({ id }) => id === schedule.services).name}
+                      <StyleLink>
+                        {" "}
+                        {services && schedule.services
+                          ? services.find(({ id }) => id === schedule.services).name
+                          : ""}
+                      </StyleLink>
                     </Link>
                   </TableCell>
                   <TableCell>{schedule.bookedDate}</TableCell>

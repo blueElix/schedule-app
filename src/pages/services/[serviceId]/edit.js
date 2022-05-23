@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { Container, Breadcrumbs, Link as StyleLink, Box, Button, TextField } from "@mui/material";
+import { Container, Breadcrumbs, Link as MuiLink, Box, Button, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 
-import Loader from "../../../components/Loader/Loader";
-import { DashboardLayout } from "../../../components/DashboadLayout";
+import Loader from "src/components/Loader/Loader";
+import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
-import { toastMsg } from "../../../helpers/toast";
+import { toastMsg } from "src/helpers/toast";
 import { getService, updateService } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";
 
@@ -98,11 +98,21 @@ const EditServices = ({ service, currentId }) => {
     <Container>
       <h1>Edit Service</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">Home </Link>
-        <Link href="/services">Services </Link>
-        <StyleLink underline="hover" color="text.primary" aria-current="page">
+        <Link href="/">
+          <StyleLink>Home</StyleLink>
+        </Link>
+        <Link href="/services">
+          <StyleLink>Services </StyleLink>
+        </Link>
+        <MuiLink
+          color="text.primary"
+          aria-current="page"
+          sx={{
+            textDecoration: "none",
+          }}
+        >
           Edit Service
-        </StyleLink>
+        </MuiLink>
       </Breadcrumbs>
       {!service ? <Loader /> : renderForm()}
     </Container>

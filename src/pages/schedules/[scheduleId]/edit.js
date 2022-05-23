@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Container,
   Breadcrumbs,
-  Link as StyleLink,
+  Link as MuiLink,
   Box,
   Button,
   TextField,
@@ -24,12 +24,13 @@ import * as Yup from "yup";
 import Link from "next/link";
 import moment from "moment";
 
-import { DashboardLayout } from "../../../components/DashboadLayout";
+import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import { services } from "src/__mocks__/services";
 import { schedules } from "src/__mocks__/schedules";
-import Loader from "../../../components/Loader/Loader";
-import { toastMsg } from "../../../helpers/toast";
+import Loader from "src/components/Loader/Loader";
+import { toastMsg } from "src/helpers/toast";
+import StyleLink from "src/components/StyleLink/StyleLink";
 
 const EditSchedules = ({ schedule }) => {
   const [submitting, setSubmitting] = useState(false);
@@ -186,15 +187,26 @@ const EditSchedules = ({ schedule }) => {
       </form>
     );
   };
+
   return (
     <Container>
       <h1>Edit Schedules</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">Home </Link>
-        <Link href="/schedules">Schedules </Link>
-        <StyleLink underline="hover" color="text.primary" aria-current="page">
+        <Link href="/">
+          <StyleLink>Home</StyleLink>
+        </Link>
+        <Link href="/schedules">
+          <StyleLink>Schedules</StyleLink>
+        </Link>
+        <MuiLink
+          color="text.primary"
+          aria-current="page"
+          sx={{
+            textDecoration: "none",
+          }}
+        >
           Edit Schedules
-        </StyleLink>
+        </MuiLink>
       </Breadcrumbs>
       {!schedule ? <Loader /> : renderForm()}
     </Container>

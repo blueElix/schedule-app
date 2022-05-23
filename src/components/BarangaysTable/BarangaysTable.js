@@ -17,6 +17,7 @@ import DeletingModal from "../Modal/DeletingModal";
 import { deleteBarangay } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import { toastMsg } from "src/helpers/toast";
+import StyleLink from "../StyleLink/StyleLink";
 
 const BarangaysTable = ({ barangays, setBarangays }) => {
   const { show, handleClose, handleShow } = useModalState();
@@ -85,7 +86,9 @@ const BarangaysTable = ({ barangays, setBarangays }) => {
                 >
                   <TableCell component="th">{index + 1}</TableCell>
                   <TableCell scope="row">
-                    <Link href={{ pathname: `/barangays/${barangay.id}` }}>{barangay.name}</Link>
+                    <Link href={{ pathname: `/barangays/${barangay.id}` }}>
+                      <StyleLink>{barangay.name}</StyleLink>
+                    </Link>
                   </TableCell>
                   <TableCell>{barangay.address}</TableCell>
                   <TableCell width="150px">
