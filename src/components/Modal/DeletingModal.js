@@ -38,8 +38,8 @@ export default function DeletingModal({
           </Typography>
           <Stack direction="row" spacing={2} justifyContent="flex-end" alignItems="center">
             <Button onClick={onClose}>Cancel</Button>
-            <Button onClick={confirmDelete} variant="error">
-              Delete
+            <Button onClick={confirmDelete} variant="error" disabled={deleting}>
+              {deleting ? "Deleting" : "Delete"}
             </Button>
           </Stack>
         </Box>

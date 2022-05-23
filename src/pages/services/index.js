@@ -4,10 +4,10 @@ import { Container, Stack, Button } from "@mui/material";
 
 import { DashboardLayout } from "../../components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
-import { services as _services } from "src/__mocks__/services";
 import ServicesTable from "src/components/ServicesTable/ServicesTables";
 import SearchForm from "src/components/SearchForm/SearchForm";
 import Loader from "src/components/Loader/Loader";
+import { getServices } from "src/api";
 
 const Dashboard = (props) => {
   const [services, setServices] = useState(props.services);
@@ -44,6 +44,7 @@ const Dashboard = (props) => {
 Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
+  const { data: _services } = await getServices();
   return {
     props: { services: _services },
   };

@@ -4,14 +4,16 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 
+import Loader from "../../../components/Loader/Loader";
 import { DashboardLayout } from "../../../components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
-import { services } from "src/__mocks__/services";
-import Loader from "../../../components/Loader/Loader";
 import { toastMsg } from "../../../helpers/toast";
+import { getService, updateService } from "src/api";
+import useLocalStorage from "src/hooks/useLocalStorage";
 
-const EditServices = ({ service }) => {
+const EditServices = ({ service, currentId }) => {
   const [submitting, setSubmitting] = useState(false);
+  const [user] = useLocalStorage("user");
 
   const formik = useFormik({
     initialValues: {
@@ -22,12 +24,21 @@ const EditServices = ({ service }) => {
       name: Yup.string().required("Services name is required."),
       description: Yup.string(),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       try {
         setSubmitting(true);
-        console.log(values);
-        setSubmitting(false);
-        toastMsg("success", "Successfully updated services.");
+        if (user) {
+          await updateService(currentId, values, {
+            headers: {
+              Authorization: `Bearer ${user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+          setTimeout(() => {
+            setSubmitting(false);
+            toastMsg("success", "Successfully updated services.");
+          }, 300);
+        }
       } catch (error) {
         toastMsg("error", "Something went wrong.");
       }
@@ -101,10 +112,11 @@ const EditServices = ({ service }) => {
 EditServices.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  const _service = services.find(({ id }) => id == ctx.query.serviceId);
+  const { data: _service } = await getService(ctx.query.serviceId);
   return {
     props: {
-      service: _service,
+      service: _service[0],
+      currentId: ctx.query.serviceId,
     },
   };
 };

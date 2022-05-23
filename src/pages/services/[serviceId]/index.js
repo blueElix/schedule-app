@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { DashboardLayout } from "../../../components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
-import { services } from "src/__mocks__/services";
+import { getService } from "src/api";
 import Loader from "../../../components/Loader/Loader";
 
 const ServicesDetails = ({ service }) => {
@@ -33,10 +33,10 @@ const ServicesDetails = ({ service }) => {
 ServicesDetails.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  const _service = services.find(({ id }) => id == ctx.query.serviceId);
+  const { data: _service } = await getService(ctx.query.serviceId);
   return {
     props: {
-      service: _service,
+      service: _service[0],
     },
   };
 };

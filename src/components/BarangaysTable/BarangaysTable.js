@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -13,7 +14,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import useModalState from "src/hooks/useModalState";
 import DeletingModal from "../Modal/DeletingModal";
-import { useState } from "react";
 import { deleteBarangay } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import { toastMsg } from "src/helpers/toast";
@@ -62,7 +62,7 @@ const BarangaysTable = ({ barangays, setBarangays }) => {
         confirmDelete={handleDeleteBarangay}
         title="Delete Barangay"
         content="Are you sure you want to delete this barangay?"
-        deleting={false}
+        deleting={isDeleting}
       />
 
       <TableContainer component={Paper}>

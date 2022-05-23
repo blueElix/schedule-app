@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -13,15 +14,42 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import useModalState from "src/hooks/useModalState";
 import DeletingModal from "../Modal/DeletingModal";
-import { useState } from "react";
+import useLocalStorage from "src/hooks/useLocalStorage";
+import { toastMsg } from "src/helpers/toast";
+import { deleteService } from "src/api";
 
 const ServicesTable = ({ services, setServices }) => {
   const { show, handleClose, handleShow } = useModalState();
   const [selectedId, setSelectedId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [user] = useLocalStorage("user");
 
   if (!Array.isArray(services)) {
     return null;
   }
+
+  const handleDeleteService = async () => {
+    try {
+      setIsDeleting(true);
+      if (user) {
+        await deleteService(selectedId, {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+        setTimeout(() => {
+          setSelectedId(null);
+          setServices(services.filter((service) => service.id !== selectedId));
+          setIsDeleting(false);
+          handleClose();
+          toastMsg("success", "Successfully deleted service.");
+        }, 300);
+      }
+    } catch (error) {
+      toastMsg("error", "Something went wrong on deleting.");
+    }
+  };
 
   return (
     <>
@@ -31,14 +59,10 @@ const ServicesTable = ({ services, setServices }) => {
           handleClose();
           setSelectedId(null);
         }}
-        confirmDelete={() => {
-          setServices(services.filter((service) => service.id !== selectedId));
-          handleClose();
-          setSelectedId(null);
-        }}
+        confirmDelete={handleDeleteService}
         title="Delete Service"
         content="Are you sure you want to delete this service?"
-        deleting={false}
+        deleting={isDeleting}
       />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">

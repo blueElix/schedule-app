@@ -10,12 +10,11 @@ import { DashboardLayout } from "../../components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 import { toastMsg } from "../../helpers/toast";
 import { createBarangay } from "src/api";
-import useLocalStorage from "../../hooks/useLocalStorage";
+import useLocalStorage from "src/hooks/useLocalStorage";
 
 const CreateBarangays = () => {
   const [submitting, setSubmitting] = useState(false);
   const [user] = useLocalStorage("user");
-
   const router = useRouter();
 
   const formik = useFormik({

@@ -8,9 +8,12 @@ import { useRouter } from "next/router";
 import { toastMsg } from "../../helpers/toast";
 import { DashboardLayout } from "../../components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
+import { createService } from "src/api";
+import useLocalStorage from "src/hooks/useLocalStorage";
 
 const CreateServices = () => {
   const [submitting, setSubmitting] = useState(false);
+  const [user] = useLocalStorage("user");
   const router = useRouter();
 
   const formik = useFormik({
@@ -22,16 +25,23 @@ const CreateServices = () => {
       name: Yup.string().required("Services name is required."),
       description: Yup.string(),
     }),
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       try {
         setSubmitting(true);
-        console.log(values);
-        setTimeout(() => {
-          setSubmitting(false);
-          router.push("/services");
-          resetForm();
-          toastMsg("success", "Successfully created service.");
-        }, 300);
+        if (user) {
+          await createService(values, {
+            headers: {
+              Authorization: `Bearer ${user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+          setTimeout(() => {
+            setSubmitting(false);
+            router.push("/services");
+            resetForm();
+            toastMsg("success", "Successfully created service.");
+          }, 300);
+        }
       } catch (error) {
         toastMsg("error", "Something went wrong.");
       }
