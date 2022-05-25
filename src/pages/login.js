@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Box, Button, Container, Link, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, Link, TextField, Typography, Alert } from "@mui/material";
 import { authenticate, isAuth } from "../helpers/auth";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import { login } from "src/api";
@@ -13,6 +13,8 @@ import { toastMsg } from "src/helpers/toast";
 const Login = () => {
   const router = useRouter();
   const [_, setUser] = useLocalStorage("user", null);
+  const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -25,16 +27,22 @@ const Login = () => {
     }),
     onSubmit: async (values) => {
       try {
+        setIsSubmitting(true);
         const { data: user } = await login({ email: values.email, password: values.password });
         setUser(user);
-        authenticate(user.accessToken, () => {
-          isAuth() && (user.user.role === "admin" || user.user.role === "superadmin")
-            ? router.push("/")
-            : router.push("/bookings");
-        });
-        toastMsg("success", user.message);
-      } catch (error) {
-        toastMsg("error", "Something went wrong, please contact your admin.");
+
+        setTimeout(() => {
+          setIsSubmitting(false);
+          authenticate(user.accessToken, () => {
+            isAuth() && (user.user.role === "admin" || user.user.role === "superadmin")
+              ? router.push("/")
+              : router.push("/bookings");
+          });
+          toastMsg("success", user.message);
+        }, 200);
+      } catch (err) {
+        setError(err);
+        setIsSubmitting(false);
       }
     },
   });
@@ -64,6 +72,11 @@ const Login = () => {
                 Sign in
               </Typography>
             </Box>
+            {error && (
+              <Alert severity="error">
+                Please make sure you have enter correct email and password.
+              </Alert>
+            )}
             <TextField
               error={Boolean(formik.touched.email && formik.errors.email)}
               fullWidth
@@ -93,13 +106,13 @@ const Login = () => {
             <Box sx={{ py: 2 }}>
               <Button
                 color="primary"
-                disabled={formik.isSubmitting}
+                disabled={isSubmitting}
                 fullWidth
                 size="large"
                 type="submit"
                 variant="contained"
               >
-                Sign In Now
+                {isSubmitting ? "Submitting" : "Sign In Now"}
               </Button>
             </Box>
             <Typography color="textSecondary" variant="body2">
