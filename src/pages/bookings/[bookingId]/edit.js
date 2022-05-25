@@ -25,6 +25,7 @@ import { bookings } from "src/__mocks__/bookings";
 import Loader from "src/components/Loader/Loader";
 import { toastMsg } from "src/helpers/toast";
 import StyleLink from "src/components/StyleLink/StyleLink";
+import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const EditBookings = ({ booking }) => {
   const [submitting, setSubmitting] = useState(false);
@@ -69,8 +70,6 @@ const EditBookings = ({ booking }) => {
       formik.setFieldValue("address", booking.address);
       formik.setFieldValue("email", booking.email);
       formik.setFieldValue("contact", booking.contact);
-    } else {
-      toastMsg("error", `Selected booking didn't load.`);
     }
   }, []);
 
@@ -194,6 +193,16 @@ const EditBookings = ({ booking }) => {
       </form>
     );
   };
+
+  if (!booking) {
+    return (
+      <PageNotFound
+        title="Booking not found"
+        linkLabel="Go back to Bookings List"
+        link="/bookings"
+      />
+    );
+  }
 
   return (
     <Container>

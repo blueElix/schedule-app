@@ -10,6 +10,7 @@ import { schedules as _schedules } from "src/__mocks__/schedules";
 import { services as _services } from "src/__mocks__/services";
 import Loader from "src/components/Loader/Loader";
 import StyleLink from "src/components/StyleLink/StyleLink";
+import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const BookingsDetails = ({ booking }) => {
   const schedule = _schedules.find(({ id }) => id == booking.schedule);
@@ -18,6 +19,16 @@ const BookingsDetails = ({ booking }) => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+
+  if (!booking) {
+    return (
+      <PageNotFound
+        title="Booking not found"
+        linkLabel="Go back to Bookings List"
+        link="/bookings"
+      />
+    );
+  }
 
   return (
     <Container>
