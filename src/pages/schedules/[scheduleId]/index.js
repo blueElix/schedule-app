@@ -7,8 +7,19 @@ import { schedules } from "src/__mocks__/schedules";
 import { services } from "src/__mocks__/services";
 import Loader from "src/components/Loader/Loader";
 import StyleLink from "src/components/StyleLink/StyleLink";
+import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const SchedulesDetails = ({ schedule }) => {
+  if (!schedule) {
+    return (
+      <PageNotFound
+        title="Schedule not found"
+        linkLabel="Go back to Schedules List"
+        link="/schedules"
+      />
+    );
+  }
+
   return (
     <Container>
       <h1>Details</h1>

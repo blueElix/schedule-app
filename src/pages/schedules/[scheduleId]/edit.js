@@ -31,6 +31,7 @@ import { schedules } from "src/__mocks__/schedules";
 import Loader from "src/components/Loader/Loader";
 import { toastMsg } from "src/helpers/toast";
 import StyleLink from "src/components/StyleLink/StyleLink";
+import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const EditSchedules = ({ schedule }) => {
   const [submitting, setSubmitting] = useState(false);
@@ -187,6 +188,16 @@ const EditSchedules = ({ schedule }) => {
       </form>
     );
   };
+
+  if (!schedule) {
+    return (
+      <PageNotFound
+        title="Schedule not found"
+        linkLabel="Go back to Schedules List"
+        link="/schedules"
+      />
+    );
+  }
 
   return (
     <Container>
