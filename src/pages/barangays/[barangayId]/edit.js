@@ -11,6 +11,7 @@ import { getBarangay, updateBarangay } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import Loader from "src/components/Loader/Loader";
 import StyleLink from "src/components/StyleLink/StyleLink";
+import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const EditBarangays = ({ barangay, currentId }) => {
   const [submitting, setSubmitting] = useState(false);
@@ -50,8 +51,6 @@ const EditBarangays = ({ barangay, currentId }) => {
     if (barangay) {
       formik.setFieldValue("name", barangay.name);
       formik.setFieldValue("address", barangay.address);
-    } else {
-      toastMsg("error", `Selected barangay didn't load.`);
     }
   }, []);
 
@@ -95,6 +94,15 @@ const EditBarangays = ({ barangay, currentId }) => {
     );
   };
 
+  if (!barangay) {
+    return (
+      <PageNotFound
+        title="Barangay not found"
+        linkLabel="Go back to Barangays List"
+        link="/barangays"
+      />
+    );
+  }
   return (
     <Container>
       <h1>Edit Barangays</h1>
@@ -126,7 +134,7 @@ const getProps = async (ctx) => {
   const { data: _barangay } = await getBarangay(ctx.query.barangayId);
   return {
     props: {
-      barangay: _barangay[0],
+      barangay: _barangay.length > 0 ? _barangay[0] : null,
       currentId: ctx.query.barangayId,
     },
   };

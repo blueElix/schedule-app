@@ -6,8 +6,18 @@ import { withAdmin } from "../../../helpers/auth";
 import Loader from "src/components/Loader/Loader";
 import StyleLink from "src/components/StyleLink/StyleLink";
 import { getBarangay } from "src/api";
+import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const BarangaysDetails = ({ barangay }) => {
+  if (!barangay) {
+    return (
+      <PageNotFound
+        title="Barangay not found"
+        linkLabel="Go back to Barangays List"
+        link="/barangays"
+      />
+    );
+  }
   return (
     <Container>
       <h1>Details</h1>
@@ -46,7 +56,7 @@ const getProps = async (ctx) => {
   const { data: _barangay } = await getBarangay(ctx.query.barangayId);
   return {
     props: {
-      barangay: _barangay[0],
+      barangay: _barangay.length > 0 ? _barangay[0] : null,
     },
   };
 };
