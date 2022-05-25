@@ -75,8 +75,6 @@ const EditSchedules = ({ schedule }) => {
       formik.setFieldValue("bookedTime", schedule.bookedTime);
       formik.setFieldValue("bookedDate", schedule.bookedDate);
       formik.setFieldValue("isAvailable", schedule.isAvailable);
-    } else {
-      toastMsg("error", `Selected schedule didn't load.`);
     }
   }, []);
 

@@ -11,6 +11,7 @@ import { toastMsg } from "src/helpers/toast";
 import { getService, updateService } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import StyleLink from "src/components/StyleLink/StyleLink";
+import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const EditServices = ({ service, currentId }) => {
   const [submitting, setSubmitting] = useState(false);
@@ -50,8 +51,6 @@ const EditServices = ({ service, currentId }) => {
     if (service) {
       formik.setFieldValue("name", service.name);
       formik.setFieldValue("description", service.description);
-    } else {
-      toastMsg("error", `Selected services didn't load.`);
     }
   }, []);
 
@@ -95,6 +94,16 @@ const EditServices = ({ service, currentId }) => {
     );
   };
 
+  if (!service) {
+    return (
+      <PageNotFound
+        title="Services not found"
+        linkLabel="Go back to Services List"
+        link="/services"
+      />
+    );
+  }
+
   return (
     <Container>
       <h1>Edit Service</h1>
@@ -126,7 +135,7 @@ const getProps = async (ctx) => {
   const { data: _service } = await getService(ctx.query.serviceId);
   return {
     props: {
-      service: _service[0],
+      service: _service.length > 0 ? _service[0] : null,
       currentId: ctx.query.serviceId,
     },
   };

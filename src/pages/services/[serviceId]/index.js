@@ -6,8 +6,19 @@ import { withAdmin } from "../../../helpers/auth";
 import { getService } from "src/api";
 import Loader from "src/components/Loader/Loader";
 import StyleLink from "src/components/StyleLink/StyleLink";
+import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const ServicesDetails = ({ service }) => {
+  if (!service) {
+    return (
+      <PageNotFound
+        title="Services not found"
+        linkLabel="Go back to Services List"
+        link="/services"
+      />
+    );
+  }
+
   return (
     <Container>
       <h1>Details</h1>
@@ -47,7 +58,7 @@ const getProps = async (ctx) => {
   const { data: _service } = await getService(ctx.query.serviceId);
   return {
     props: {
-      service: _service[0],
+      service: _service.length > 0 ? _service[0] : null,
     },
   };
 };
