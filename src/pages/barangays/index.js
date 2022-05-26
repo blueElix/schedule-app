@@ -46,7 +46,16 @@ const Dashboard = (props) => {
 Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  const { data: _barangays } = await getBarangays();
+  const token = ctx.req.headers.cookie.split(";").find((c) => c.trim().startsWith(`token=`));
+  const tokenValue = token.split("=")[1];
+
+  const { data: _barangays } = await getBarangays({
+    headers: {
+      Authorization: `Bearer ${tokenValue}`,
+      "Content-Type": "application/json",
+    },
+  });
+
   return {
     props: { barangays: _barangays },
   };

@@ -132,10 +132,18 @@ const EditServices = ({ service, currentId }) => {
 EditServices.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  const { data: _service } = await getService(ctx.query.serviceId);
+  const token = ctx.req.headers.cookie.split(";").find((c) => c.trim().startsWith(`token=`));
+  const tokenValue = token.split("=")[1];
+
+  const { data: _service } = await getService(ctx.query.serviceId, {
+    headers: {
+      Authorization: `Bearer ${tokenValue}`,
+      "Content-Type": "application/json",
+    },
+  });
   return {
     props: {
-      service: _service.length > 0 ? _service[0] : null,
+      service: _service,
       currentId: ctx.query.serviceId,
     },
   };

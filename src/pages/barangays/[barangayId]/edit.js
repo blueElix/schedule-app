@@ -131,7 +131,16 @@ const EditBarangays = ({ barangay, currentId }) => {
 EditBarangays.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  const { data: _barangay } = await getBarangay(ctx.query.barangayId);
+  const token = ctx.req.headers.cookie.split(";").find((c) => c.trim().startsWith(`token=`));
+  const tokenValue = token.split("=")[1];
+
+  const { data: _barangay } = await getBarangay(ctx.query.barangayId, {
+    headers: {
+      Authorization: `Bearer ${tokenValue}`,
+      "Content-Type": "application/json",
+    },
+  });
+
   return {
     props: {
       barangay: _barangay.length > 0 ? _barangay[0] : null,

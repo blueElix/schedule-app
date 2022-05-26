@@ -30,6 +30,7 @@ import { withAdmin } from "../../helpers/auth";
 import { services } from "src/__mocks__/services";
 import { toastMsg } from "src/helpers/toast";
 import StyleLink from "src/components/StyleLink/StyleLink";
+import TimePicker from "src/components/TimePicker/TimePicker";
 
 const CreateSchedules = () => {
   const [submitting, setSubmitting] = useState(false);
@@ -38,13 +39,15 @@ const CreateSchedules = () => {
   const formik = useFormik({
     initialValues: {
       bookedDate: "",
-      bookedTime: "",
+      bookedStartTime: "",
+      bookedEndTime: "",
       services: "",
       isAvailable: false,
     },
     validationSchema: Yup.object({
       bookedDate: Yup.string().required("Schedule date is required."),
-      bookedTime: Yup.string().required("Schedule time is required."),
+      bookedStartTime: Yup.string().required("Schedule start time is required."),
+      bookedEndTime: Yup.string().required("Schedule end time is required."),
       services: Yup.string().required("Services is required."),
       isAvailable: Yup.boolean(),
     }),
@@ -52,7 +55,8 @@ const CreateSchedules = () => {
       try {
         const payload = {
           bookedDate: moment(values.bookedDate).format("M/D/YYYY"),
-          bookedTime: values.bookedTime,
+          bookedStartTime: moment(values.bookedStartTime).format("HH:mm a"),
+          bookedEndTime: moment(values.bookedEndTime).format("HH:mm a"),
           services: values.services,
           isAvailable: values.isAvailable,
         };
@@ -71,49 +75,50 @@ const CreateSchedules = () => {
     },
   });
 
-  const renderTimeSelect = () => {
-    const formattedDate = moment(formik.values.bookedDate).format("YYYY-MM-DD");
-    const startDate = moment(formattedDate + " " + "08:00");
-    const endDate = moment(formattedDate + " " + "16:45");
-    const datesBetween = [];
+  // fix time
+  // const renderTimeSelect = () => {
+  //   const formattedDate = moment(formik.values.bookedDate).format("YYYY-MM-DD");
+  //   const startDate = moment(formattedDate + " " + "08:00");
+  //   const endDate = moment(formattedDate + " " + "16:45");
+  //   const datesBetween = [];
 
-    const startingMoment = startDate;
+  //   const startingMoment = startDate;
 
-    while (startingMoment <= endDate) {
-      datesBetween.push(startingMoment.clone()); // clone to add new object
-      startingMoment.add(15, "minutes").format("hh:mm A");
-    }
+  //   while (startingMoment <= endDate) {
+  //     datesBetween.push(startingMoment.clone()); // clone to add new object
+  //     startingMoment.add(15, "minutes").format("hh:mm A");
+  //   }
 
-    return (
-      <FormControl fullWidth margin="normal">
-        <InputLabel id="selectTimeslot">Select booking time</InputLabel>
-        <Select
-          labelId="selectTimeslot"
-          id="demo-simple-select"
-          value={formik.values.bookedTime}
-          label="Select bookedTime"
-          name="bookedTime"
-          onChange={formik.handleChange}
-        >
-          {datesBetween.length > 0 ? (
-            datesBetween.map((date, index) => {
-              let timeSlot =
-                moment(date).format("hh:mm A") +
-                " - " +
-                moment(date).add(15, "minutes").format("hh:mm A");
-              return (
-                <MenuItem value={timeSlot} key={index.toString()}>
-                  {timeSlot}
-                </MenuItem>
-              );
-            })
-          ) : (
-            <MenuItem value="">No time available</MenuItem>
-          )}
-        </Select>
-      </FormControl>
-    );
-  };
+  //   return (
+  //     <FormControl fullWidth margin="normal">
+  //       <InputLabel id="selectTimeslot">Select booking time</InputLabel>
+  //       <Select
+  //         labelId="selectTimeslot"
+  //         id="demo-simple-select"
+  //         value={formik.values.bookedTime}
+  //         label="Select bookedTime"
+  //         name="bookedTime"
+  //         onChange={formik.handleChange}
+  //       >
+  //         {datesBetween.length > 0 ? (
+  //           datesBetween.map((date, index) => {
+  //             let timeSlot =
+  //               moment(date).format("hh:mm A") +
+  //               " - " +
+  //               moment(date).add(15, "minutes").format("hh:mm A");
+  //             return (
+  //               <MenuItem value={timeSlot} key={index.toString()}>
+  //                 {timeSlot}
+  //               </MenuItem>
+  //             );
+  //           })
+  //         ) : (
+  //           <MenuItem value="">No time available</MenuItem>
+  //         )}
+  //       </Select>
+  //     </FormControl>
+  //   );
+  // };
 
   const renderForm = () => {
     return (
@@ -140,8 +145,8 @@ const CreateSchedules = () => {
           </Select>
         </FormControl>
 
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Stack direction="row" spacing={2} alignItems="center" mb={2} mt={2}>
+        <Stack direction="row" spacing={2} alignItems="center" mb={2} mt={2}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="Booking date"
               value={formik.values.bookedDate}
@@ -154,9 +159,25 @@ const CreateSchedules = () => {
                 />
               )}
             />
-            {renderTimeSelect()}
-          </Stack>
-        </LocalizationProvider>
+          </LocalizationProvider>
+
+          <TimePicker
+            label="Booking Start Time"
+            inputProps={{
+              value: formik.values.bookedStartTime,
+              onChange: (newValue) => formik.setFieldValue("bookedStartTime", newValue),
+            }}
+            error={Boolean(formik.touched.bookedStartTime && formik.errors.bookedStartTime)}
+          />
+          <TimePicker
+            label="Booking End Time"
+            inputProps={{
+              value: formik.values.bookedEndTime,
+              onChange: (newValue) => formik.setFieldValue("bookedEndTime", newValue),
+            }}
+            error={Boolean(formik.touched.bookedEndTime && formik.errors.bookedEndTime)}
+          />
+        </Stack>
 
         <FormGroup>
           <FormControlLabel

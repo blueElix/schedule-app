@@ -15,23 +15,25 @@ export const getUserDetails = (token) =>
   });
 
 // barangays
-export const getBarangays = () => axios.get(`${url}/admin/barangay`);
+export const getBarangays = (header) => axios.get(`${url}/admin/barangays`, header);
 
-export const getBarangay = (barangayId) => axios.get(`${url}/admin/barangay/${barangayId}`);
+export const getBarangay = (barangayId, header) =>
+  axios.get(`${url}/admin/barangays/${barangayId}`, header);
 
 export const createBarangay = (barangayPayload, header) =>
-  axios.post(`${url}/admin/barangay`, barangayPayload, header);
+  axios.post(`${url}/admin/barangays`, barangayPayload, header);
 
 export const updateBarangay = (barangayId, barangayPayload, header) =>
-  axios.put(`${url}/admin/barangay/${barangayId}`, barangayPayload, header);
+  axios.put(`${url}/admin/barangays/${barangayId}`, barangayPayload, header);
 
 export const deleteBarangay = (barangayId, header) =>
-  axios.delete(`${url}/admin/barangay/${barangayId}`, header);
+  axios.delete(`${url}/admin/barangays/${barangayId}`, header);
 
 // services
-export const getServices = () => axios.get(`${url}/admin/services`);
+export const getServices = (header) => axios.get(`${url}/admin/services`, header);
 
-export const getService = (serviceId) => axios.get(`${url}/admin/services/${serviceId}`);
+export const getService = (serviceId, header) =>
+  axios.get(`${url}/admin/services/${serviceId}`, header);
 
 export const createService = (servicePayload, header) =>
   axios.post(`${url}/admin/services`, servicePayload, header);
