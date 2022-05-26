@@ -101,7 +101,8 @@ export const withAdmin = (gssp) => {
     if (token) {
       try {
         const { data: _user } = await getUserDetails(token);
-        user = _user.user;
+
+        user = _user.data;
       } catch (error) {
         user = null;
         console.log(error);

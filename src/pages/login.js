@@ -31,6 +31,8 @@ const Login = () => {
         const { data: user } = await login({ email: values.email, password: values.password });
         setUser(user);
 
+        console.log(user);
+
         setTimeout(() => {
           setIsSubmitting(false);
           authenticate(user.accessToken, () => {

@@ -7,7 +7,7 @@ export const login = (userLogin) => axios.post(`${url}/auth/login`, userLogin);
 export const register = (userRegister) => axios.post(`${url}/auth/register`, userRegister);
 
 export const getUserDetails = (token) =>
-  axios.get(`${url}/auth/user?token=${token}`, {
+  axios.get(`${url}/auth/getMe`, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",

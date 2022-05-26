@@ -4,17 +4,19 @@ import Link from "next/link";
 import { useReactToPrint } from "react-to-print";
 
 import { DashboardLayout } from "src/components/DashboadLayout";
-import { withAdmin } from "../../../helpers/auth";
+import { withUser } from "../../../helpers/auth";
 import { bookings } from "src/__mocks__/bookings";
 import { schedules as _schedules } from "src/__mocks__/schedules";
 import { services as _services } from "src/__mocks__/services";
 import Loader from "src/components/Loader/Loader";
 import StyleLink from "src/components/StyleLink/StyleLink";
 import PageNotFound from "src/components/PageNotFound/PageNotFound";
+import useLocalStorage from "src/hooks/useLocalStorage";
 
 const BookingsDetails = ({ booking }) => {
   const schedule = _schedules.find(({ id }) => id == booking.schedule);
   const componentRef = useRef();
+  const [user] = useLocalStorage("user");
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -65,9 +67,11 @@ const BookingsDetails = ({ booking }) => {
             </h4>
             <h4>Services: {_services.find(({ id }) => id == booking.services).name}</h4>
           </Container>
-          <Button onClick={handlePrint} sx={{ margin: "10px" }}>
-            Print this out!
-          </Button>
+          {user && (user.user.role === "admin" || user.user.role === "superAdmin") && (
+            <Button onClick={handlePrint} sx={{ margin: "10px" }}>
+              Print this out!
+            </Button>
+          )}
         </>
       )}
     </Container>
@@ -85,6 +89,6 @@ const getProps = async (ctx) => {
   };
 };
 
-export const getServerSideProps = withAdmin(getProps);
+export const getServerSideProps = withUser(getProps);
 
 export default BookingsDetails;
