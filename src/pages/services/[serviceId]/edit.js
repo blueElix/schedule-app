@@ -143,7 +143,7 @@ const getProps = async (ctx) => {
   });
   return {
     props: {
-      service: _service,
+      service: _service.data || null,
       currentId: ctx.query.serviceId,
     },
   };

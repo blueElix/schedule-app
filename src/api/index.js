@@ -14,8 +14,15 @@ export const getUserDetails = (token) =>
     },
   });
 
+export const createUser = (userPayload, header) =>
+  axios.post(`${url}/admin/users`, userPayload, header);
+
 // barangays
-export const getBarangays = (header) => axios.get(`${url}/admin/barangays`, header);
+export const getBarangays = (header, { limit = 1, page = 1, sort = "createdAt", search = "" }) =>
+  axios.get(
+    `${url}/admin/barangays?limit=${limit}&page=${page}&sort=${sort}&search=${search}`,
+    header
+  );
 
 export const getBarangay = (barangayId, header) =>
   axios.get(`${url}/admin/barangays/${barangayId}`, header);
@@ -30,7 +37,11 @@ export const deleteBarangay = (barangayId, header) =>
   axios.delete(`${url}/admin/barangays/${barangayId}`, header);
 
 // services
-export const getServices = (header) => axios.get(`${url}/admin/services`, header);
+export const getServices = (header, { limit = 1, page = 1, sort = "createdAt", search = "" }) =>
+  axios.get(
+    `${url}/admin/services?limit=${limit}&page=${page}&sort=${sort}&search=${search}`,
+    header
+  );
 
 export const getService = (serviceId, header) =>
   axios.get(`${url}/admin/services/${serviceId}`, header);

@@ -67,7 +67,7 @@ const BookingsDetails = ({ booking }) => {
             </h4>
             <h4>Services: {_services.find(({ id }) => id == booking.services).name}</h4>
           </Container>
-          {user && (user.user.role === "admin" || user.user.role === "superAdmin") && (
+          {user && (user.user.role === "ADMIN" || user.user.role === "SUPERADMIN") && (
             <Button onClick={handlePrint} sx={{ margin: "10px" }}>
               Print this out!
             </Button>

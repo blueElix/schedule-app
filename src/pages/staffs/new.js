@@ -29,9 +29,12 @@ import { services } from "src/__mocks__/services";
 import { barangays } from "src/__mocks__/barangays";
 import { toastMsg } from "src/helpers/toast";
 import StyleLink from "src/components/StyleLink/StyleLink";
+import { getBarangays, getServices, createUser } from "src/api";
+import useLocalStorage from "src/hooks/useLocalStorage";
 
-const CreateStaffs = () => {
+const CreateStaffs = ({ barangays, services }) => {
   const [submitting, setSubmitting] = useState(false);
+  const [user] = useLocalStorage("user");
   const router = useRouter();
 
   const formik = useFormik({
@@ -42,7 +45,6 @@ const CreateStaffs = () => {
       type: "",
       services: "",
       barangays: "",
-      role: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Staff name is required."),
@@ -54,12 +56,32 @@ const CreateStaffs = () => {
       type: Yup.string().required("Staff type is required."),
       services: Yup.string(),
       barangays: Yup.string(),
-      role: Yup.string(),
     }),
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       try {
         setSubmitting(true);
         console.log(values);
+
+        const payload = {
+          serviceId: values.services,
+          barangayId: values.barangays,
+          email: values.email,
+          fullName: values.name,
+          role: values.role,
+          contact: values.contact,
+          type: values.type,
+          role: "USER",
+        };
+
+        const res = await createUser(payload, {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        console.log(res);
+
         setTimeout(() => {
           setSubmitting(false);
           router.push("/staffs");
@@ -67,6 +89,7 @@ const CreateStaffs = () => {
           toastMsg("success", "Successfully created staff.");
         }, 300);
       } catch (error) {
+        console.log(error);
         toastMsg("error", "Something went wrong.");
       }
     },
@@ -110,9 +133,9 @@ const CreateStaffs = () => {
             value={formik.values.type}
             onChange={formik.handleChange}
           >
-            <FormControlLabel value="service-staff" control={<Radio />} label="Service Staff" />
-            <FormControlLabel value="barangay-staff" control={<Radio />} label="Barangay Staff" />
-            <FormControlLabel value="staff" control={<Radio />} label="Staff" />
+            <FormControlLabel value="SERVICES_STAFF" control={<Radio />} label="Service Staff" />
+            <FormControlLabel value="BARANGAY_STAFF" control={<Radio />} label="Barangay Staff" />
+            <FormControlLabel value="STAFF" control={<Radio />} label="Staff" />
           </RadioGroup>
           <FormHelperText>{formik.touched.type && formik.errors.type}</FormHelperText>
         </FormControl>
@@ -137,7 +160,7 @@ const CreateStaffs = () => {
           )}
         </InputMask>
 
-        {formik.values.type === "service-staff" && (
+        {formik.values.type === "SERVICES_STAFF" && (
           <FormControl fullWidth margin="normal">
             <InputLabel id="selectServices">Services</InputLabel>
             <Select
@@ -161,7 +184,7 @@ const CreateStaffs = () => {
           </FormControl>
         )}
 
-        {formik.values.type === "barangay-staff" && (
+        {formik.values.type === "BARANGAY_STAFF" && (
           <FormControl fullWidth margin="normal">
             <InputLabel id="selectBarangay">Barangay</InputLabel>
             <Select
@@ -222,8 +245,41 @@ const CreateStaffs = () => {
 CreateStaffs.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
+  const token = ctx.req.headers.cookie.split(";").find((c) => c.trim().startsWith(`token=`));
+  const tokenValue = token.split("=")[1];
+
+  const { data: _barangays } = await getBarangays(
+    {
+      headers: {
+        Authorization: `Bearer ${tokenValue}`,
+        "Content-Type": "application/json",
+      },
+    },
+    {
+      limit: 500,
+      page: 1,
+      sort: "created_at",
+      search: "",
+    }
+  );
+
+  const { data: _services } = await getServices(
+    {
+      headers: {
+        Authorization: `Bearer ${tokenValue}`,
+        "Content-Type": "application/json",
+      },
+    },
+    {
+      limit: 500,
+      page: 1,
+      sort: "created_at",
+      search: "",
+    }
+  );
+
   return {
-    props: {},
+    props: { barangays: _barangays.data, services: _services.data },
   };
 };
 

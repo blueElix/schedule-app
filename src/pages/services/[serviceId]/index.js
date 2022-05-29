@@ -64,9 +64,10 @@ const getProps = async (ctx) => {
       "Content-Type": "application/json",
     },
   });
+
   return {
     props: {
-      service: _service,
+      service: _service.data || null,
     },
   };
 };

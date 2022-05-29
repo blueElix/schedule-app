@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Link from "next/link";
 import { Container, Stack, Button } from "@mui/material";
 
@@ -7,16 +6,17 @@ import { withAdmin } from "../../helpers/auth";
 import ServicesTable from "src/components/ServicesTable/ServicesTables";
 import SearchForm from "src/components/SearchForm/SearchForm";
 import Loader from "src/components/Loader/Loader";
-import { getServices } from "src/api";
+import useServices from "src/hooks/useServices";
+import Pagination from "src/components/Pagination/Pagination";
 
-const Dashboard = (props) => {
-  const [services, setServices] = useState(props.services);
-  const [isLoading, setIsLoading] = useState(false);
+const Dashboard = () => {
+  const { isLoading, services, setServices, filtersDispatch, pagination } = useServices();
 
-  const handleOnSearch = (value) => {
-    setIsLoading(true);
-    setServices(services.filter(({ name }) => name.toLowerCase().startsWith(value.toLowerCase())));
-    setIsLoading(false);
+  const applySearch = (value) => {
+    filtersDispatch({
+      type: "search",
+      payload: value,
+    });
   };
 
   return (
@@ -25,7 +25,14 @@ const Dashboard = (props) => {
         <h1>Services</h1>
 
         <Stack direction="row" spacing={2}>
-          <SearchForm onSearch={handleOnSearch} resetSearch={() => setServices(props.services)} />
+          <SearchForm
+            onSearch={applySearch}
+            resetSearch={() =>
+              filtersDispatch({
+                type: "reset",
+              })
+            }
+          />
           <Link href="services/new">
             <Button variant="contained">Create services</Button>
           </Link>
@@ -35,7 +42,19 @@ const Dashboard = (props) => {
       {isLoading || !services ? (
         <Loader />
       ) : (
-        <ServicesTable services={services} setServices={setServices} />
+        <>
+          <ServicesTable services={services} setServices={setServices} />
+
+          <Pagination
+            pagination={pagination}
+            onPageClick={(page) => {
+              filtersDispatch({
+                type: "page",
+                payload: page,
+              });
+            }}
+          />
+        </>
       )}
     </Container>
   );
@@ -44,17 +63,8 @@ const Dashboard = (props) => {
 Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  const token = ctx.req.headers.cookie.split(";").find((c) => c.trim().startsWith(`token=`));
-  const tokenValue = token.split("=")[1];
-
-  const { data: _services } = await getServices({
-    headers: {
-      Authorization: `Bearer ${tokenValue}`,
-      "Content-Type": "application/json",
-    },
-  });
   return {
-    props: { services: _services },
+    props: {},
   };
 };
 

@@ -30,8 +30,8 @@ const Bookings = (props) => {
         <Stack direction="row" spacing={2}>
           <SearchForm onSearch={handleOnSearch} resetSearch={() => setBookings(props.bookings)} />
           {user &&
-            (user.user.role === "superadmin" ||
-              user.user.role === "admin" ||
+            (user.user.role === "SUPERADMIN" ||
+              user.user.role === "ADMIN" ||
               user.user.type === "barangay-staff") && (
               <Link href="bookings/new">
                 <Button variant="contained">Create booking</Button>
@@ -43,8 +43,8 @@ const Bookings = (props) => {
       {isLoading || !bookings ? (
         <Loader />
       ) : user &&
-        (user.user.role === "superadmin" ||
-          user.user.role === "admin" ||
+        (user.user.role === "SUPERADMIN" ||
+          user.user.role === "ADMIN" ||
           user.user.type === "barangay-staff") ? (
         <BookingsTable bookings={bookings} setBookings={setBookings} />
       ) : (

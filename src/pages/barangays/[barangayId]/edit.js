@@ -143,7 +143,7 @@ const getProps = async (ctx) => {
 
   return {
     props: {
-      barangay: _barangay.length > 0 ? _barangay[0] : null,
+      barangay: _barangay.data || null,
       currentId: ctx.query.barangayId,
     },
   };

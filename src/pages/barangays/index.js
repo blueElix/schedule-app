@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Link from "next/link";
 import { Container, Stack, Button } from "@mui/material";
 
@@ -8,18 +7,17 @@ import { barangays as _barangays } from "src/__mocks__/barangays";
 import BarangaysTable from "src/components/BarangaysTable/BarangaysTable";
 import SearchForm from "src/components/SearchForm/SearchForm";
 import Loader from "src/components/Loader/Loader";
-import { getBarangays } from "src/api";
+import Pagination from "src/components/Pagination/Pagination";
+import useBarangay from "src/hooks/useBarangays";
 
-const Dashboard = (props) => {
-  const [barangays, setBarangays] = useState(props.barangays);
-  const [isLoading, setIsLoading] = useState(false);
+const Barangays = () => {
+  const { pagination, isLoading, barangays, setBarangays, filtersDispatch } = useBarangay();
 
-  const handleOnSearch = (value) => {
-    setIsLoading(true);
-    setBarangays(
-      barangays.filter(({ name }) => name.toLowerCase().startsWith(value.toLowerCase()))
-    );
-    setIsLoading(false);
+  const applySearch = (value) => {
+    filtersDispatch({
+      type: "search",
+      payload: value,
+    });
   };
 
   return (
@@ -27,7 +25,14 @@ const Dashboard = (props) => {
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center" mb={2}>
         <h1>Barangays</h1>
         <Stack direction="row" spacing={2}>
-          <SearchForm onSearch={handleOnSearch} resetSearch={() => setBarangays(props.barangays)} />
+          <SearchForm
+            onSearch={applySearch}
+            resetSearch={() =>
+              filtersDispatch({
+                type: "reset",
+              })
+            }
+          />
           <Link href="barangays/new">
             <Button variant="contained">Create Barangay</Button>
           </Link>
@@ -37,30 +42,31 @@ const Dashboard = (props) => {
       {isLoading || !barangays ? (
         <Loader />
       ) : (
-        <BarangaysTable barangays={barangays} setBarangays={setBarangays} />
+        <>
+          <BarangaysTable barangays={barangays} setBarangays={setBarangays} />
+          <Pagination
+            pagination={pagination}
+            onPageClick={(page) => {
+              filtersDispatch({
+                type: "page",
+                payload: page,
+              });
+            }}
+          />
+        </>
       )}
     </Container>
   );
 };
 
-Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+Barangays.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  const token = ctx.req.headers.cookie.split(";").find((c) => c.trim().startsWith(`token=`));
-  const tokenValue = token.split("=")[1];
-
-  const { data: _barangays } = await getBarangays({
-    headers: {
-      Authorization: `Bearer ${tokenValue}`,
-      "Content-Type": "application/json",
-    },
-  });
-
   return {
-    props: { barangays: _barangays },
+    props: {},
   };
 };
 
 export const getServerSideProps = withAdmin(getProps);
 
-export default Dashboard;
+export default Barangays;
