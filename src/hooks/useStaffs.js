@@ -1,12 +1,12 @@
 import { useState, useEffect, useReducer } from "react";
-import { getBarangays } from "src/api";
+import { getStaffs } from "src/api";
 import { toastMsg } from "src/helpers/toast";
 import useLocalStorage from "./useLocalStorage";
 
-const useBarangay = () => {
+const useStaffs = () => {
   const [user] = useLocalStorage("user");
 
-  const [barangays, setBarangays] = useState([]);
+  const [staffs, setStaffs] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,7 +44,7 @@ const useBarangay = () => {
     const run = async () => {
       try {
         setIsLoading(true);
-        const result = await getBarangays(
+        const result = await getStaffs(
           {
             headers: {
               Authorization: `Bearer ${user.accessToken}`,
@@ -62,7 +62,7 @@ const useBarangay = () => {
 
         setTimeout(() => {
           setPagination({ ...data, limit: filters.limit, page: filters.page });
-          setBarangays(data.data);
+          setStaffs(data.data);
           setIsLoading(false);
         }, 200);
       } catch (err) {
@@ -76,12 +76,12 @@ const useBarangay = () => {
   return {
     filters,
     filtersDispatch,
-    barangays,
+    staffs,
     pagination,
     isLoading,
-    setBarangays,
+    setStaffs,
     setPagination,
   };
 };
 
-export default useBarangay;
+export default useStaffs;

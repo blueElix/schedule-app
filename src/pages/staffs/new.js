@@ -25,8 +25,6 @@ import { useRouter } from "next/router";
 
 import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
-import { services } from "src/__mocks__/services";
-import { barangays } from "src/__mocks__/barangays";
 import { toastMsg } from "src/helpers/toast";
 import StyleLink from "src/components/StyleLink/StyleLink";
 import { getBarangays, getServices, createUser } from "src/api";
@@ -60,17 +58,21 @@ const CreateStaffs = ({ barangays, services }) => {
     onSubmit: async (values, { resetForm }) => {
       try {
         setSubmitting(true);
-        console.log(values);
 
         const payload = {
-          serviceId: values.services,
-          barangayId: values.barangays,
+          serviceId: values.services == "" ? null : values.services,
+          barangayId: values.barangays == "" ? null : values.barangays,
           email: values.email,
           fullName: values.name,
           role: values.role,
           contact: values.contact,
           type: values.type,
-          role: "USER",
+          role:
+            values.type === "BARANGAY_STAFF"
+              ? "BARANGAY"
+              : values.type === "SERVICE_STAFF"
+              ? "SERVICE"
+              : "STAFF",
         };
 
         const res = await createUser(payload, {
@@ -133,7 +135,7 @@ const CreateStaffs = ({ barangays, services }) => {
             value={formik.values.type}
             onChange={formik.handleChange}
           >
-            <FormControlLabel value="SERVICES_STAFF" control={<Radio />} label="Service Staff" />
+            <FormControlLabel value="SERVICE_STAFF" control={<Radio />} label="Service Staff" />
             <FormControlLabel value="BARANGAY_STAFF" control={<Radio />} label="Barangay Staff" />
             <FormControlLabel value="STAFF" control={<Radio />} label="Staff" />
           </RadioGroup>
@@ -160,7 +162,7 @@ const CreateStaffs = ({ barangays, services }) => {
           )}
         </InputMask>
 
-        {formik.values.type === "SERVICES_STAFF" && (
+        {formik.values.type === "SERVICE_STAFF" && (
           <FormControl fullWidth margin="normal">
             <InputLabel id="selectServices">Services</InputLabel>
             <Select

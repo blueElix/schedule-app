@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Link from "next/link";
 import { Container, Stack, Button } from "@mui/material";
 
@@ -8,15 +7,17 @@ import { users as _staffs } from "src/__mocks__/users";
 import StaffsTable from "src/components/StaffsTable/StaffsTable";
 import SearchForm from "src/components/SearchForm/SearchForm";
 import Loader from "src/components/Loader/Loader";
+import useStaffs from "src/hooks/useStaffs";
+import Pagination from "src/components/Pagination/Pagination";
 
 const Dashboard = (props) => {
-  const [staffs, setStaffs] = useState(props.staffs);
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, setIsLoading, staffs, setStaffs, pagination, filtersDispatch } = useStaffs();
 
-  const handleOnSearch = (value) => {
-    setIsLoading(true);
-    setStaffs(staffs.filter(({ name }) => name.toLowerCase().startsWith(value.toLowerCase())));
-    setIsLoading(false);
+  const applySearch = (value) => {
+    filtersDispatch({
+      type: "search",
+      payload: value,
+    });
   };
 
   return (
@@ -25,14 +26,36 @@ const Dashboard = (props) => {
         <h1>Staffs</h1>
 
         <Stack direction="row" spacing={2}>
-          <SearchForm onSearch={handleOnSearch} resetSearch={() => setStaffs(props.staffs)} />
+          <SearchForm
+            onSearch={applySearch}
+            resetSearch={() =>
+              filtersDispatch({
+                type: "reset",
+              })
+            }
+          />
           <Link href="staffs/new">
             <Button variant="contained">Create staffs</Button>
           </Link>
         </Stack>
       </Stack>
 
-      {isLoading || !staffs ? <Loader /> : <StaffsTable staffs={staffs} setStaffs={setStaffs} />}
+      {isLoading || !staffs ? (
+        <Loader />
+      ) : (
+        <>
+          <StaffsTable staffs={staffs} setStaffs={setStaffs} />
+          <Pagination
+            pagination={pagination}
+            onPageClick={(page) => {
+              filtersDispatch({
+                type: "page",
+                payload: page,
+              });
+            }}
+          />
+        </>
+      )}
     </Container>
   );
 };
@@ -41,7 +64,7 @@ Dashboard.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
   return {
-    props: { staffs: _staffs },
+    props: {},
   };
 };
 

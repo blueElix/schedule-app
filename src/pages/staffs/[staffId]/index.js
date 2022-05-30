@@ -3,9 +3,9 @@ import Link from "next/link";
 
 import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
-import { users } from "src/__mocks__/users";
 import Loader from "src/components/Loader/Loader";
 import StyleLink from "src/components/StyleLink/StyleLink";
+import { getStaff } from "src/api";
 
 const StaffsDetails = ({ staff }) => {
   return (
@@ -33,10 +33,9 @@ const StaffsDetails = ({ staff }) => {
         <Loader />
       ) : (
         <div>
-          <h3>Name: {staff.name}</h3>
-          <h4>Role: {staff.role}</h4>
+          <h3>Name: {staff.full_name}</h3>
           <h4>Email: {staff.email}</h4>
-          <h4>Contact: +60{staff.contact}</h4>
+          <h4>Contact: {staff.contact}</h4>
           <h4>Type: {staff.type}</h4>
         </div>
       )}
@@ -47,10 +46,19 @@ const StaffsDetails = ({ staff }) => {
 StaffsDetails.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  const _staff = users.find(({ id }) => id == ctx.query.staffId);
+  const token = ctx.req.headers.cookie.split(";").find((c) => c.trim().startsWith(`token=`));
+  const tokenValue = token.split("=")[1];
+
+  const { data: _staff } = await getStaff(ctx.query.staffId, {
+    headers: {
+      Authorization: `Bearer ${tokenValue}`,
+      "Content-Type": "application/json",
+    },
+  });
+
   return {
     props: {
-      staff: _staff,
+      staff: _staff.data || null,
     },
   };
 };

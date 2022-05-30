@@ -17,6 +17,17 @@ export const getUserDetails = (token) =>
 export const createUser = (userPayload, header) =>
   axios.post(`${url}/admin/users`, userPayload, header);
 
+export const getStaffs = (header, { limit = 1, page = 1, sort = "createdAt", search = "" }) =>
+  axios.get(`${url}/admin/users?limit=${limit}&page=${page}&sort=${sort}&search=${search}`, header);
+
+export const getStaff = (staffId, header) => axios.get(`${url}/admin/users/${staffId}`, header);
+
+export const updateStaff = (staffId, staffPayload, header) =>
+  axios.put(`${url}/admin/users/${staffId}`, staffPayload, header);
+
+export const deleteStaff = (staffId, header) =>
+  axios.delete(`${url}/admin/users/${staffId}`, header);
+
 // barangays
 export const getBarangays = (header, { limit = 1, page = 1, sort = "createdAt", search = "" }) =>
   axios.get(
