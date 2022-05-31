@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Container,
   Breadcrumbs,
@@ -27,14 +27,25 @@ import { useRouter } from "next/router";
 
 import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
-import { services } from "src/__mocks__/services";
 import { toastMsg } from "src/helpers/toast";
 import StyleLink from "src/components/StyleLink/StyleLink";
 import TimePicker from "src/components/TimePicker/TimePicker";
+import useLocalStorage from "src/hooks/useLocalStorage";
+import useServices from "src/hooks/useServices";
+import { createSchedule } from "src/api";
 
 const CreateSchedules = () => {
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
+  const [user] = useLocalStorage("user");
+  const { services, filtersDispatch } = useServices();
+
+  useEffect(() => {
+    filtersDispatch({
+      type: "limit",
+      payload: 1000,
+    });
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -42,26 +53,30 @@ const CreateSchedules = () => {
       bookedStartTime: "",
       bookedEndTime: "",
       services: "",
-      isAvailable: false,
     },
     validationSchema: Yup.object({
       bookedDate: Yup.string().required("Schedule date is required."),
       bookedStartTime: Yup.string().required("Schedule start time is required."),
       bookedEndTime: Yup.string().required("Schedule end time is required."),
       services: Yup.string().required("Services is required."),
-      isAvailable: Yup.boolean(),
     }),
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       try {
         const payload = {
-          bookedDate: moment(values.bookedDate).format("M/D/YYYY"),
-          bookedStartTime: moment(values.bookedStartTime).format("HH:mm a"),
-          bookedEndTime: moment(values.bookedEndTime).format("HH:mm a"),
-          services: values.services,
-          isAvailable: values.isAvailable,
+          schedDate: moment(values.bookedDate).format("YYYY-M-D"),
+          startTime: moment(values.bookedStartTime).format("HH:mm a"),
+          endTime: moment(values.bookedEndTime).format("HH:mm a"),
+          serviceId: values.services,
+          userId: user.user.id,
         };
+
         setSubmitting(true);
-        console.log(payload);
+        const res = await createSchedule(payload, {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         setTimeout(() => {
           setSubmitting(false);
@@ -178,19 +193,6 @@ const CreateSchedules = () => {
             error={Boolean(formik.touched.bookedEndTime && formik.errors.bookedEndTime)}
           />
         </Stack>
-
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="isAvailable"
-                checked={formik.values.isAvailable}
-                onChange={(e) => formik.setFieldValue("isAvailable", !formik.values.isAvailable)}
-              />
-            }
-            label="Available"
-          />
-        </FormGroup>
 
         <Box sx={{ py: 2 }} textAlign="right">
           <Button color="primary" disabled={submitting} type="submit" variant="contained">

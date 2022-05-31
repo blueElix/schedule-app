@@ -45,11 +45,6 @@ const adminLinks = [
     title: "Barangays",
   },
   {
-    href: "/bookings",
-    icon: <MenuBookIcon fontSize="small" />,
-    title: "Bookings",
-  },
-  {
     href: "/account",
     icon: <AccountCircleIcon fontSize="small" />,
     title: "Profile",

@@ -65,3 +65,22 @@ export const updateService = (serviceId, servicePayload, header) =>
 
 export const deleteService = (serviceId, header) =>
   axios.delete(`${url}/admin/services/${serviceId}`, header);
+
+// schedules
+export const getSchedules = (header, { limit = 1, page = 1, sort = "createdAt", search = "" }) =>
+  axios.get(
+    `${url}/admin/schedules?limit=${limit}&page=${page}&sort=${sort}&search=${search}`,
+    header
+  );
+
+export const getSchedule = (scheduleId, header) =>
+  axios.get(`${url}/admin/schedules/${scheduleId}`, header);
+
+export const createSchedule = (schedulePayload, header) =>
+  axios.post(`${url}/admin/schedules`, schedulePayload, header);
+
+export const updateSchedule = (scheduleId, schedulePayload, header) =>
+  axios.put(`${url}/admin/schedules/${scheduleId}`, schedulePayload, header);
+
+export const deleteSchedule = (scheduleId, header) =>
+  axios.delete(`${url}/admin/schedules/${scheduleId}`, header);

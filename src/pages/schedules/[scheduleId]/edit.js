@@ -11,9 +11,6 @@ import {
   MenuItem,
   Stack,
   FormControl,
-  FormControlLabel,
-  Checkbox,
-  FormGroup,
 } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -26,16 +23,26 @@ import moment from "moment";
 
 import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
-import { services } from "src/__mocks__/services";
-import { schedules } from "src/__mocks__/schedules";
 import Loader from "src/components/Loader/Loader";
 import { toastMsg } from "src/helpers/toast";
 import StyleLink from "src/components/StyleLink/StyleLink";
 import PageNotFound from "src/components/PageNotFound/PageNotFound";
 import TimePicker from "src/components/TimePicker/TimePicker";
+import { getSchedule, updateSchedule } from "src/api";
+import useServices from "src/hooks/useServices";
+import useLocalStorage from "src/hooks/useLocalStorage";
 
-const EditSchedules = ({ schedule }) => {
+const EditSchedules = ({ schedule, currentId }) => {
   const [submitting, setSubmitting] = useState(false);
+  const [user] = useLocalStorage("user");
+  const { services, filtersDispatch } = useServices();
+
+  useEffect(() => {
+    filtersDispatch({
+      type: "limit",
+      payload: 1000,
+    });
+  }, []);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -44,29 +51,33 @@ const EditSchedules = ({ schedule }) => {
       bookedStartTime: "",
       bookedEndTime: "",
       services: "",
-      isAvailable: false,
     },
     validationSchema: Yup.object({
       bookedDate: Yup.string().required("Schedule date is required."),
       bookedStartTime: Yup.string().required("Schedule start time is required."),
       bookedEndTime: Yup.string().required("Schedule end time is required."),
-      services: Yup.string().required("Services is required."),
-      isAvailable: Yup.boolean(),
+      services: Yup.string(),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       try {
         const payload = {
-          bookedDate: moment(values.bookedDate).format("M/D/YYYY"),
-          bookedStartTime: moment(values.bookedStartTime).format("HH:mm a"),
-          bookedEndTime: moment(values.bookedEndTime).format("HH:mm a"),
-          services: values.services,
-          isAvailable: values.isAvailable,
+          schedDate: moment(values.bookedDate).format("YYYY-M-D"),
+          startTime: moment(values.bookedStartTime).format("HH:mm a"),
+          endTime: moment(values.bookedEndTime).format("HH:mm a"),
         };
 
         setSubmitting(true);
-        console.log(payload);
-        setSubmitting(false);
-        toastMsg("success", "Successfully updated schedule.");
+        const res = await updateSchedule(currentId, payload, {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        setTimeout(() => {
+          setSubmitting(false);
+          toastMsg("success", "Successfully updated schedule.");
+        }, 300);
       } catch (error) {
         toastMsg("error", "Something went wrong.");
       }
@@ -75,17 +86,11 @@ const EditSchedules = ({ schedule }) => {
 
   useEffect(() => {
     if (schedule) {
-      formik.setFieldValue("services", schedule.services);
-      formik.setFieldValue(
-        "bookedStartTime",
-        new Date(moment(schedule.bookedDate + " " + schedule.bookedStartTime))
-      );
-      formik.setFieldValue(
-        "bookedEndTime",
-        new Date(moment(schedule.bookedDate + " " + schedule.bookedEndTime))
-      );
-      formik.setFieldValue("bookedDate", schedule.bookedDate);
-      formik.setFieldValue("isAvailable", schedule.isAvailable);
+      const date = moment(schedule.sched_date).format("YYYY-M-D");
+      formik.setFieldValue("services", schedule.service_id);
+      formik.setFieldValue("bookedStartTime", new Date(moment(date + " " + schedule.start_time)));
+      formik.setFieldValue("bookedEndTime", new Date(moment(date + " " + schedule.end_time)));
+      formik.setFieldValue("bookedDate", schedule.sched_date);
     }
   }, []);
 
@@ -145,6 +150,7 @@ const EditSchedules = ({ schedule }) => {
             label="Select services"
             name="services"
             onChange={formik.handleChange}
+            disabled
           >
             {Array.isArray(services) && services.length > 0 ? (
               services.map((service) => (
@@ -191,7 +197,7 @@ const EditSchedules = ({ schedule }) => {
             error={Boolean(formik.touched.bookedEndTime && formik.errors.bookedEndTime)}
           />
         </Stack>
-
+        {/* 
         <FormGroup>
           <FormControlLabel
             control={
@@ -203,7 +209,7 @@ const EditSchedules = ({ schedule }) => {
             }
             label="Available"
           />
-        </FormGroup>
+        </FormGroup> */}
 
         <Box sx={{ py: 2 }} textAlign="right">
           <Button color="primary" disabled={submitting} type="submit" variant="contained">
@@ -252,10 +258,20 @@ const EditSchedules = ({ schedule }) => {
 EditSchedules.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  const _schedule = schedules.find(({ id }) => id == ctx.query.scheduleId);
+  const token = ctx.req.headers.cookie.split(";").find((c) => c.trim().startsWith(`token=`));
+  const tokenValue = token.split("=")[1];
+
+  const { data: _schedule } = await getSchedule(ctx.query.scheduleId, {
+    headers: {
+      Authorization: `Bearer ${tokenValue}`,
+      "Content-Type": "application/json",
+    },
+  });
+
   return {
     props: {
-      schedule: _schedule,
+      schedule: _schedule.data || null,
+      currentId: ctx.query.scheduleId,
     },
   };
 };

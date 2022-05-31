@@ -37,7 +37,6 @@ const CreateBarangays = () => {
               "Content-Type": "application/json",
             },
           });
-          console.log(res);
           setTimeout(() => {
             setSubmitting(false);
             resetForm();
