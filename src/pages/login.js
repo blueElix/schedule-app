@@ -36,9 +36,7 @@ const Login = () => {
         setTimeout(() => {
           setIsSubmitting(false);
           authenticate(user.accessToken, () => {
-            isAuth() && (user.user.role === "admin" || user.user.role === "superadmin")
-              ? router.push("/")
-              : router.push("/bookings");
+            isAuth() && user.user.role === "ADMIN" ? router.push("/") : router.push("/bookings");
           });
           toastMsg("success", user.message);
         }, 200);

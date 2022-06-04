@@ -1,6 +1,4 @@
-import { useState } from "react";
 import Link from "next/link";
-
 import { Container, Stack, Button } from "@mui/material";
 
 import { DashboardLayout } from "../../components/DashboadLayout";
@@ -11,16 +9,27 @@ import BookingsTableView from "../../components/BookingsTableView/BookingsTableV
 import SearchForm from "src/components/SearchForm/SearchForm";
 import Loader from "src/components/Loader/Loader";
 import useLocalStorage from "src/hooks/useLocalStorage";
+import useBookings from "src/hooks/useBookings";
+import Pagination from "src/components/Pagination/Pagination";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const Bookings = (props) => {
-  const [bookings, setBookings] = useState(props.bookings);
-  const [isLoading, setIsLoading] = useState(false);
+  const { bookings, setBookings, isLoading, pagination, filtersDispatch } = useBookings();
   const [user] = useLocalStorage("user");
+  const router = useRouter();
 
-  const handleOnSearch = (value) => {
-    setIsLoading(true);
-    setBookings(bookings.filter(({ name }) => name.toLowerCase().startsWith(value.toLowerCase())));
-    setIsLoading(false);
+  useEffect(() => {
+    if (user.user.role === "ADMIN") {
+      router.push("/");
+    }
+  }, [user]);
+
+  const applySearch = (value) => {
+    filtersDispatch({
+      type: "search",
+      payload: value,
+    });
   };
 
   return (
@@ -28,28 +37,44 @@ const Bookings = (props) => {
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center" mb={2}>
         <h1>Bookings</h1>
         <Stack direction="row" spacing={2}>
-          <SearchForm onSearch={handleOnSearch} resetSearch={() => setBookings(props.bookings)} />
-          {user &&
-            (user.user.role === "SUPERADMIN" ||
-              user.user.role === "ADMIN" ||
-              user.user.type === "barangay-staff") && (
-              <Link href="bookings/new">
-                <Button variant="contained">Create booking</Button>
-              </Link>
-            )}
+          <SearchForm
+            onSearch={applySearch}
+            resetSearch={() =>
+              filtersDispatch({
+                type: "reset",
+              })
+            }
+          />
+          {user && user.user.type === "BARANGAY_STAFF" && (
+            <Link href="bookings/new">
+              <Button variant="contained">Create booking</Button>
+            </Link>
+          )}
         </Stack>
       </Stack>
 
       {isLoading || !bookings ? (
         <Loader />
-      ) : user &&
-        (user.user.role === "SUPERADMIN" ||
-          user.user.role === "ADMIN" ||
-          user.user.type === "barangay-staff") ? (
+      ) : user && user.user.role === "BARANGAY_STAFF" ? (
         <BookingsTable bookings={bookings} setBookings={setBookings} />
       ) : (
         <BookingsTableView bookings={bookings} />
       )}
+      <Pagination
+        pagination={pagination}
+        onPageClick={(page) => {
+          filtersDispatch({
+            type: "page",
+            payload: page,
+          });
+        }}
+        onLimitChange={(limit) => {
+          filtersDispatch({
+            type: "limit",
+            payload: limit,
+          });
+        }}
+      />
     </Container>
   );
 };
@@ -57,13 +82,8 @@ const Bookings = (props) => {
 Bookings.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 const getProps = async (ctx) => {
-  // get bookings for barangay staff (userType: 'barangay-staff', barangayId)
-  // get bookings for service staff (userType: 'service-staff', servicesId)
-  // get me
   return {
-    props: {
-      bookings: _bookings,
-    },
+    props: {},
   };
 };
 

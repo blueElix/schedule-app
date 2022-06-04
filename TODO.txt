@@ -78,4 +78,13 @@ MENU
         -> Barangay Staff -> choose baranggay
         -> Service Staff -> choose services 
 
+ 
+need endpoint
+>> pagination for get booking by staff(services, barangay)
+>> get schedule by services id 
+>> service staff list join with services table
+>> endpoint for services staff authorize only SERVICES
+>> Booking create update schedule is_available to false
+
+
 

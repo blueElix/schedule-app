@@ -1,5 +1,5 @@
 import { useState, useEffect, useReducer } from "react";
-import { getServices } from "src/api";
+import { getServices, getServicesUsers } from "src/api";
 import { toastMsg } from "src/helpers/toast";
 import useLocalStorage from "./useLocalStorage";
 
@@ -9,6 +9,7 @@ const useServices = () => {
   const [services, setServices] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [servicesStaffs, setServicesStaffs] = useState([]);
 
   const initialState = {
     sort: "created_at",
@@ -73,6 +74,23 @@ const useServices = () => {
     run();
   }, [filters]);
 
+  const getServicesStaffs = async () => {
+    try {
+      setIsLoading(true);
+      const { data: staffs } = await getServicesUsers({
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      setServicesStaffs(staffs.data);
+      setIsLoading(false);
+    } catch (error) {
+      toastMsg("error", error.message);
+      setIsLoading(false);
+    }
+  };
+
   return {
     filters,
     filtersDispatch,
@@ -81,6 +99,8 @@ const useServices = () => {
     isLoading,
     setServices,
     setPagination,
+    getServicesStaffs,
+    servicesStaffs,
   };
 };
 

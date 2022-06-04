@@ -118,8 +118,8 @@ export const DashboardSidebar = (props) => {
             ))}
 
           {user &&
-            user.user.role == "BARANGAY" &&
-            (user.user.type === "BARANGAY_STAFF" || user.user.type === "BARANGAY_STAFF") &&
+            (user.user.role === "BARANGAY" || user.user.role === "SERVICE") &&
+            (user.user.type === "BARANGAY_STAFF" || user.user.type === "SERVICE_STAFF") &&
             staffLinks.map((item) => (
               <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
             ))}

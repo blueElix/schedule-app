@@ -36,6 +36,7 @@ const CreateStaffs = ({ barangays, services }) => {
   const router = useRouter();
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       name: "",
       email: "",
@@ -46,14 +47,23 @@ const CreateStaffs = ({ barangays, services }) => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Staff name is required."),
-      contact: Yup.string(),
+      contact: Yup.string().required("Staff contact is required."),
       email: Yup.string()
         .email("Must be a valid email")
         .max(255)
         .required("Staff email is required"),
       type: Yup.string().required("Staff type is required."),
-      services: Yup.string(),
-      barangays: Yup.string(),
+      services: Yup.string().when("type", {
+        is: (isType) => isType === "SERVICE_STAFF",
+        then: Yup.string().required("Service is required."),
+      }),
+      barangays: Yup.string().when("type", {
+        is: (isType) => isType === "BARANGAY_STAFF",
+        then: Yup.string().required("Barangay is required."),
+      }),
+      // formik.values.type && formik.values.type == "BARANGAY_STAFF"
+      //   ? Yup.string().required("Barangay is required.")
+      //   : Yup.string(),
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
@@ -64,15 +74,14 @@ const CreateStaffs = ({ barangays, services }) => {
           barangayId: values.barangays == "" ? null : values.barangays,
           email: values.email,
           fullName: values.name,
-          role: values.role,
           contact: values.contact,
-          type: values.type,
+          type: values.type === "ADMIN" ? null : values.type,
           role:
             values.type === "BARANGAY_STAFF"
               ? "BARANGAY"
               : values.type === "SERVICE_STAFF"
               ? "SERVICE"
-              : "STAFF",
+              : "ADMIN",
         };
 
         const res = await createUser(payload, {
@@ -81,8 +90,6 @@ const CreateStaffs = ({ barangays, services }) => {
             "Content-Type": "application/json",
           },
         });
-
-        console.log(res);
 
         setTimeout(() => {
           setSubmitting(false);
@@ -137,7 +144,7 @@ const CreateStaffs = ({ barangays, services }) => {
           >
             <FormControlLabel value="SERVICE_STAFF" control={<Radio />} label="Service Staff" />
             <FormControlLabel value="BARANGAY_STAFF" control={<Radio />} label="Barangay Staff" />
-            <FormControlLabel value="STAFF" control={<Radio />} label="Staff" />
+            <FormControlLabel value="ADMIN" control={<Radio />} label="Staff" />
           </RadioGroup>
           <FormHelperText>{formik.touched.type && formik.errors.type}</FormHelperText>
         </FormControl>
@@ -183,6 +190,7 @@ const CreateStaffs = ({ barangays, services }) => {
                 <MenuItem value="">No services available</MenuItem>
               )}
             </Select>
+            <FormHelperText>{formik.touched.services && formik.errors.services}</FormHelperText>
           </FormControl>
         )}
 
@@ -207,6 +215,7 @@ const CreateStaffs = ({ barangays, services }) => {
                 <MenuItem value="">No barangay available</MenuItem>
               )}
             </Select>
+            <FormHelperText>{formik.touched.barangays && formik.errors.barangays}</FormHelperText>
           </FormControl>
         )}
 

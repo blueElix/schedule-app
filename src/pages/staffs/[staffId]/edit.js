@@ -57,21 +57,9 @@ const EditStaffs = ({ staff, currentId, barangays, services }) => {
     onSubmit: async (values) => {
       try {
         const payload = {
-          serviceId: values.services == "" ? null : values.services,
-          barangayId: values.barangays == "" ? null : values.barangays,
-          email: values.email,
           fullName: values.name,
-          role: values.role,
           contact: values.contact,
-          type: values.type,
-          role:
-            values.type === "BARANGAY_STAFF"
-              ? "BARANGAY"
-              : values.type === "SERVICE_STAFF"
-              ? "SERVICE"
-              : "STAFF",
         };
-
         const res = await updateStaff(currentId, payload, {
           headers: {
             Authorization: `Bearer ${user.accessToken}`,
@@ -91,9 +79,6 @@ const EditStaffs = ({ staff, currentId, barangays, services }) => {
     if (staff) {
       formik.setFieldValue("name", staff.full_name);
       formik.setFieldValue("contact", staff.contact);
-      formik.setFieldValue("email", staff.email);
-      formik.setFieldValue("type", staff.type);
-      formik.setFieldValue("role", staff.role);
     } else {
       toastMsg("error", `Selected staff didn't load.`);
     }
@@ -115,35 +100,6 @@ const EditStaffs = ({ staff, currentId, barangays, services }) => {
           value={formik.values.name}
           variant="outlined"
         />
-        <TextField
-          error={Boolean(formik.touched.email && formik.errors.email)}
-          fullWidth
-          helperText={formik.touched.email && formik.errors.email}
-          label="Staff Email Address"
-          margin="normal"
-          name="email"
-          onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
-          type="email"
-          value={formik.values.email}
-          variant="outlined"
-        />
-        <FormControl error={Boolean(formik.touched.type && formik.errors.type)} margin="normal">
-          <FormLabel id="staffType">Type</FormLabel>
-          <RadioGroup
-            row
-            aria-labelledby="staffType"
-            name="type"
-            value={formik.values.type}
-            onChange={formik.handleChange}
-          >
-            <FormControlLabel value="SERVICE_STAFF" control={<Radio />} label="Service Staff" />
-            <FormControlLabel value="BARANGAY_STAFF" control={<Radio />} label="Barangay Staff" />
-            <FormControlLabel value="STAFF" control={<Radio />} label="Staff" />
-          </RadioGroup>
-          <FormHelperText>{formik.touched.type && formik.errors.type}</FormHelperText>
-        </FormControl>
-
         <InputMask
           mask="(+63) 999 999 9999"
           value={formik.values.contact}

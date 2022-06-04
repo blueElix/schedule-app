@@ -24,7 +24,7 @@ const CreateServices = () => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Services name is required."),
-      description: Yup.string(),
+      description: Yup.string().required("Services description is required."),
     }),
     onSubmit: async (values, { resetForm }) => {
       try {

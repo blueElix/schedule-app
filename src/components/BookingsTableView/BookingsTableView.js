@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,11 +9,26 @@ import {
   Paper,
 } from "@mui/material";
 import Link from "next/link";
-import { schedules } from "src/__mocks__/schedules";
-import { services } from "src/__mocks__/services";
+import moment from "moment";
+
+import useSchedules from "src/hooks/useSchedules";
+import useServices from "src/hooks/useServices";
 import StyleLink from "../StyleLink/StyleLink";
 
 const BookingsTableView = ({ bookings }) => {
+  const { services, filtersDispatch: serviceDispatch } = useServices();
+  const { schedules, filtersDispatch } = useSchedules();
+
+  useEffect(() => {
+    serviceDispatch({
+      type: "limit",
+      payload: 1000,
+    });
+    filtersDispatch({
+      type: "limit",
+      payload: 1000,
+    });
+  }, []);
   if (!Array.isArray(bookings)) {
     return null;
   }
@@ -31,23 +47,51 @@ const BookingsTableView = ({ bookings }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {bookings.map((booking, index) => (
-            <TableRow key={booking.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-              <TableCell component="th">{index + 1}</TableCell>
-              <TableCell scope="row">
-                <Link href={{ pathname: `/bookings/${booking.id}` }}>
-                  <StyleLink>{booking.name}</StyleLink>
-                </Link>
-              </TableCell>
-              <TableCell>+63{booking.contact}</TableCell>
-              <TableCell>{booking.email}</TableCell>
-              <TableCell>
-                {schedules.find(({ id }) => id === booking.schedule).bookedDate} -{" "}
-                {schedules.find(({ id }) => id === booking.schedule).bookedTime}
-              </TableCell>
-              <TableCell>{services.find(({ id }) => id === booking.services).name}</TableCell>
+          {services.length > 0 &&
+          schedules.length > 0 &&
+          Array.isArray(bookings) &&
+          bookings.length > 0 ? (
+            bookings.map((booking, index) => {
+              const currentSched = schedules.find(({ id }) => id == booking.sched_id);
+              const currentService = services.find(({ id }) => id == booking.service_id);
+              return (
+                <TableRow
+                  key={booking.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th">{index + 1}</TableCell>
+                  <TableCell scope="row">
+                    <Link href={{ pathname: `/bookings/${booking.id}` }}>
+                      <StyleLink>{booking.client_name}</StyleLink>
+                    </Link>
+                  </TableCell>
+                  <TableCell>{booking.client_contact}</TableCell>
+                  <TableCell>{booking.client_email}</TableCell>
+                  <TableCell>
+                    {currentSched.sched_date
+                      ? moment(currentSched.sched_date).format("M/D/YYYY")
+                      : ""}{" "}
+                    - (
+                    {currentSched.start_time
+                      ? moment(currentSched.start_time, "HH:mm:ss").format("HH:mm A")
+                      : ""}{" "}
+                    -{" "}
+                    {currentSched.end_time
+                      ? moment(currentSched.end_time, "HH:mm:ss").format("HH:mm A")
+                      : ""}
+                    )
+                  </TableCell>
+                  <TableCell>
+                    <TableCell>{currentService ? currentService.name : ""}</TableCell>
+                  </TableCell>
+                </TableRow>
+              );
+            })
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6}> No Bookings available.</TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </TableContainer>

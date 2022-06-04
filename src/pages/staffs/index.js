@@ -53,6 +53,12 @@ const Dashboard = (props) => {
                 payload: page,
               });
             }}
+            onLimitChange={(limit) => {
+              filtersDispatch({
+                type: "limit",
+                payload: limit,
+              });
+            }}
           />
         </>
       )}

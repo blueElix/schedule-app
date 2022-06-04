@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -12,19 +12,63 @@ import {
 import Link from "next/link";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import moment from "moment";
+
+import useSchedules from "src/hooks/useSchedules";
 import useModalState from "src/hooks/useModalState";
 import DeletingModal from "../Modal/DeletingModal";
-import { schedules } from "src/__mocks__/schedules";
-import { services } from "src/__mocks__/services";
 import StyleLink from "../StyleLink/StyleLink";
+import useServices from "src/hooks/useServices";
+import { deleteBooking } from "src/api";
+import { toastMsg } from "src/helpers/toast";
+import useLocalStorage from "src/hooks/useLocalStorage";
 
 const BookingsTable = ({ bookings, setBookings }) => {
   const { show, handleClose, handleShow } = useModalState();
   const [selectedId, setSelectedId] = useState(null);
+  const { services, filtersDispatch: servicesDispatch } = useServices();
+  const { schedules, filtersDispatch } = useSchedules();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [user] = useLocalStorage("user");
+
+  useEffect(() => {
+    servicesDispatch({
+      type: "limit",
+      payload: 1000,
+    });
+    filtersDispatch({
+      type: "limit",
+      payload: 1000,
+    });
+  }, []);
 
   if (!Array.isArray(bookings)) {
     return null;
   }
+
+  const handleDeleteBooking = async () => {
+    try {
+      setIsDeleting(true);
+      if (user) {
+        await deleteBooking(selectedId, {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+        setTimeout(() => {
+          setSelectedId(null);
+          setBookings(bookings.filter((booking) => booking.id !== selectedId));
+          setIsDeleting(false);
+          handleClose();
+          toastMsg("success", "Successfully deleted booking.");
+        }, 300);
+      }
+    } catch (error) {
+      console.log(error);
+      toastMsg("error", "Something went wrong on deleting.");
+    }
+  };
 
   return (
     <>
@@ -34,14 +78,10 @@ const BookingsTable = ({ bookings, setBookings }) => {
           handleClose();
           setSelectedId(null);
         }}
-        confirmDelete={() => {
-          setBookings(bookings.filter((booking) => booking.id !== selectedId));
-          handleClose();
-          setSelectedId(null);
-        }}
+        confirmDelete={handleDeleteBooking}
         title="Delete Booking"
         content="Are you sure you want to delete this booking?"
-        deleting={false}
+        deleting={isDeleting}
       />
 
       <TableContainer component={Paper}>
@@ -58,40 +98,67 @@ const BookingsTable = ({ bookings, setBookings }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {bookings.map((booking, index) => (
-              <TableRow key={booking.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                <TableCell component="th">{index + 1}</TableCell>
-                <TableCell scope="row">
-                  <Link href={{ pathname: `/bookings/${booking.id}` }}>
-                    <StyleLink>{booking.name}</StyleLink>
-                  </Link>
-                </TableCell>
-                <TableCell>+63{booking.contact}</TableCell>
-                <TableCell>{booking.email}</TableCell>
-                <TableCell>
-                  {schedules.find(({ id }) => id === booking.schedule).bookedDate} -{" "}
-                  {schedules.find(({ id }) => id === booking.schedule).bookedTime}
-                </TableCell>
-                <TableCell>{services.find(({ id }) => id === booking.services).name}</TableCell>
-                <TableCell width="150px">
-                  <IconButton
-                    variant="outlined"
-                    color="error"
-                    onClick={() => {
-                      handleShow();
-                      setSelectedId(booking.id);
-                    }}
+            {services.length > 0 &&
+            schedules.length > 0 &&
+            Array.isArray(bookings) &&
+            bookings.length > 0 ? (
+              bookings.map((booking, index) => {
+                const currentSched = schedules.find(({ id }) => id == booking.sched_id);
+                const currentService = services.find(({ id }) => id == booking.service_id);
+
+                return (
+                  <TableRow
+                    key={booking.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <DeleteIcon />
-                  </IconButton>
-                  <Link href={`bookings/${booking.id}/edit`}>
-                    <IconButton variant="outlined" color="secondary">
-                      <EditIcon />
-                    </IconButton>
-                  </Link>
-                </TableCell>
+                    <TableCell component="th">{index + 1}</TableCell>
+                    <TableCell scope="row">
+                      <Link href={{ pathname: `/bookings/${booking.id}` }}>
+                        <StyleLink>{booking.client_name}</StyleLink>
+                      </Link>
+                    </TableCell>
+                    <TableCell>{booking.client_contact}</TableCell>
+                    <TableCell>{booking.client_email}</TableCell>
+                    <TableCell>
+                      {currentSched.sched_date
+                        ? moment(currentSched.sched_date).format("M/D/YYYY")
+                        : ""}{" "}
+                      - (
+                      {currentSched.start_time
+                        ? moment(currentSched.start_time, "HH:mm:ss").format("HH:mm A")
+                        : ""}{" "}
+                      -{" "}
+                      {currentSched.end_time
+                        ? moment(currentSched.end_time, "HH:mm:ss").format("HH:mm A")
+                        : ""}
+                      )
+                    </TableCell>
+                    <TableCell>{currentService ? currentService.name : ""}</TableCell>
+                    <TableCell width="150px">
+                      <IconButton
+                        variant="outlined"
+                        color="error"
+                        onClick={() => {
+                          handleShow();
+                          setSelectedId(booking.id);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                      <Link href={`bookings/${booking.id}/edit`}>
+                        <IconButton variant="outlined" color="secondary">
+                          <EditIcon />
+                        </IconButton>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7}> No Bookings available.</TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
