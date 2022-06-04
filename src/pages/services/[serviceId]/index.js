@@ -23,11 +23,8 @@ const ServicesDetails = ({ service }) => {
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <Link href="/">
-          <StyleLink>Home</StyleLink>
-        </Link>
         <Link href="/services">
-          <StyleLink>Services</StyleLink>
+          <a className="styleLink">Services</a>
         </Link>
         <MuiLink
           color="text.primary"

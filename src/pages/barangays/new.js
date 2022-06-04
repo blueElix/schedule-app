@@ -94,11 +94,8 @@ const CreateBarangays = () => {
     <Container>
       <h1>Create Barangay</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink>Home</StyleLink>
-        </Link>
         <Link href="/barangays">
-          <StyleLink>Barangays</StyleLink>
+          <a className="styleLink">Barangays</a>
         </Link>
         <MuiLink
           color="text.primary"

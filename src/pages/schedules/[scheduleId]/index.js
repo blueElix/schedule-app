@@ -44,11 +44,8 @@ const SchedulesDetails = ({ schedule }) => {
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <Link href="/">
-          <StyleLink>Home</StyleLink>
-        </Link>
         <Link href="/schedules">
-          <StyleLink>Schedules</StyleLink>
+          <a className="styleLink">Schedules</a>
         </Link>
         <MuiLink
           color="text.primary"

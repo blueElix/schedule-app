@@ -108,11 +108,8 @@ const EditServices = ({ service, currentId }) => {
     <Container>
       <h1>Edit Service</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink>Home</StyleLink>
-        </Link>
         <Link href="/services">
-          <StyleLink>Services </StyleLink>
+          <a className="styleLink">Services </a>
         </Link>
         <MuiLink
           color="text.primary"

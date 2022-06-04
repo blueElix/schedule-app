@@ -87,7 +87,7 @@ const BarangaysTable = ({ barangays, setBarangays }) => {
                   <TableCell component="th">{index + 1}</TableCell>
                   <TableCell scope="row">
                     <Link href={{ pathname: `/barangays/${barangay.id}` }}>
-                      <StyleLink>{barangay.name}</StyleLink>
+                      <a className="styleLink">{barangay.name}</a>
                     </Link>
                   </TableCell>
                   <TableCell>{barangay.address}</TableCell>

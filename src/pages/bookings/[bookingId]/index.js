@@ -76,11 +76,8 @@ const BookingsDetails = ({ booking }) => {
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <Link href="/">
-          <a>Home</a>
-        </Link>
         <Link href="/bookings">
-          <a>Bookings </a>
+          <a className="styleLink">Bookings </a>
         </Link>
         <MuiLink
           color="text.primary"

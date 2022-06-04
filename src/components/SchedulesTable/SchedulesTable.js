@@ -113,7 +113,7 @@ const SchedulesTable = ({ schedules, setSchedules }) => {
                     {isLoading ? (
                       <Loader />
                     ) : (
-                      <StyleLink>{renderServices(schedule.service_id)}</StyleLink>
+                      <a className="styleLink">{renderServices(schedule.service_id)}</a>
                     )}
                   </Link>
                 </TableCell>

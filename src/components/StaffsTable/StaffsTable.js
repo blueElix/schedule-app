@@ -84,7 +84,7 @@ const StaffsTable = ({ staffs, setStaffs }) => {
                 <TableCell component="th">{index + 1}</TableCell>
                 <TableCell scope="row">
                   <Link href={`staffs/${staff.id}`}>
-                    <StyleLink>{staff.full_name}</StyleLink>
+                    <a className="styleLink">{staff.full_name}</a>
                   </Link>
                 </TableCell>
                 <TableCell>{staff.email}</TableCell>

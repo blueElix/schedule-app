@@ -207,11 +207,8 @@ const CreateSchedules = () => {
     <Container>
       <h1>Create Schedules</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink>Home</StyleLink>
-        </Link>
         <Link href="/schedules">
-          <StyleLink>Schedules</StyleLink>
+          <a className="styleLink">Schedules</a>
         </Link>
         <MuiLink
           color="text.primary"

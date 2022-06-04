@@ -115,21 +115,6 @@ const Login = () => {
                 {isSubmitting ? "Submitting" : "Sign In Now"}
               </Button>
             </Box>
-            <Typography color="textSecondary" variant="body2">
-              Don&apos;t have an account?{" "}
-              <NextLink href="/register">
-                <Link
-                  to="/register"
-                  variant="subtitle2"
-                  underline="hover"
-                  sx={{
-                    cursor: "pointer",
-                  }}
-                >
-                  Sign Up
-                </Link>
-              </NextLink>
-            </Typography>
           </form>
         </Container>
       </Box>

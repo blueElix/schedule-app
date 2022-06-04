@@ -84,7 +84,7 @@ const ServicesTable = ({ services, setServices }) => {
                 <TableCell component="th">{index + 1}</TableCell>
                 <TableCell scope="row">
                   <Link href={{ pathname: `/services/${service.id}` }}>
-                    <StyleLink>{service.name}</StyleLink>
+                    <a className="styleLink">{service.name}</a>
                   </Link>
                 </TableCell>
                 <TableCell>{service.description}</TableCell>

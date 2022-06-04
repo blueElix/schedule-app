@@ -107,11 +107,8 @@ const EditBarangays = ({ barangay, currentId }) => {
     <Container>
       <h1>Edit Barangays</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink>Home</StyleLink>
-        </Link>
         <Link href="/barangays">
-          <StyleLink> Barangays</StyleLink>
+          <a className="styleLink"> Barangays</a>
         </Link>
         <MuiLink
           color="text.primary"

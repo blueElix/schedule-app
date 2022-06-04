@@ -309,11 +309,8 @@ const EditBookings = ({ booking, currentId }) => {
     <Container>
       <h1>Edit Booking</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink>Home</StyleLink>
-        </Link>
         <Link href="/bookings">
-          <StyleLink>Bookings</StyleLink>
+          <a className="styleLink">Bookings</a>
         </Link>
         <MuiLink
           color="text.primary"

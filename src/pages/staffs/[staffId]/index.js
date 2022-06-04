@@ -12,11 +12,8 @@ const StaffsDetails = ({ staff }) => {
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <Link href="/">
-          <StyleLink>Home</StyleLink>
-        </Link>
         <Link href="/staffs">
-          <StyleLink>Staffs</StyleLink>
+          <a className="styleLink">Staffs</a>
         </Link>
         <MuiLink
           color="text.primary"

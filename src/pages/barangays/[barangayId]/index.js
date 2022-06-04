@@ -22,11 +22,8 @@ const BarangaysDetails = ({ barangay }) => {
     <Container>
       <h1>Details</h1>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
-        <Link href="/">
-          <StyleLink>Home</StyleLink>
-        </Link>
         <Link href="/barangays">
-          <StyleLink> Barangays</StyleLink>
+          <a className="styleLink"> Barangays</a>
         </Link>
         <MuiLink
           color="text.primary"

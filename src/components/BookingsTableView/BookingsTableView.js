@@ -62,7 +62,7 @@ const BookingsTableView = ({ bookings }) => {
                   <TableCell component="th">{index + 1}</TableCell>
                   <TableCell scope="row">
                     <Link href={{ pathname: `/bookings/${booking.id}` }}>
-                      <StyleLink>{booking.client_name}</StyleLink>
+                      <a className="styleLink">{booking.client_name}</a>
                     </Link>
                   </TableCell>
                   <TableCell>{booking.client_contact}</TableCell>

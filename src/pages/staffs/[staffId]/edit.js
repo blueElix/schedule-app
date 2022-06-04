@@ -180,11 +180,8 @@ const EditStaffs = ({ staff, currentId, barangays, services }) => {
     <Container>
       <h1>Edit Staff</h1>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link href="/">
-          <StyleLink>Home</StyleLink>
-        </Link>
         <Link href="/staffs">
-          <StyleLink>Staffs</StyleLink>
+          <a className="styleLink">Staffs</a>
         </Link>
         <MuiLink
           color="text.primary"
