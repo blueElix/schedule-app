@@ -11,9 +11,7 @@ import {
   MenuItem,
   Stack,
   FormControl,
-  FormControlLabel,
-  Checkbox,
-  FormGroup,
+  FormHelperText,
 } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -158,6 +156,7 @@ const CreateSchedules = () => {
               <MenuItem value="">No services available</MenuItem>
             )}
           </Select>
+          <FormHelperText>{formik.touched.services && formik.errors.services}</FormHelperText>
         </FormControl>
 
         <Stack direction="row" spacing={2} alignItems="center" mb={2} mt={2}>

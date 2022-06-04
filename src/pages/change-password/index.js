@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Container, Stack, Button, Box, TextField, Typography } from "@mui/material";
+import { Container, Stack, Button, Box, TextField } from "@mui/material";
 
 import { DashboardLayout } from "../../components/DashboadLayout";
 import { withUser } from "../../helpers/auth";
@@ -10,7 +9,7 @@ import { changePassword } from "src/api";
 import { toastMsg } from "src/helpers/toast";
 
 const ChangePassword = (props) => {
-  const [user, setUser] = useLocalStorage("user");
+  const [user] = useLocalStorage("user");
 
   const formik = useFormik({
     initialValues: {

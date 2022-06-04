@@ -11,6 +11,7 @@ import {
   MenuItem,
   Stack,
   FormControl,
+  FormHelperText,
 } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -25,7 +26,6 @@ import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import Loader from "src/components/Loader/Loader";
 import { toastMsg } from "src/helpers/toast";
-import StyleLink from "src/components/StyleLink/StyleLink";
 import PageNotFound from "src/components/PageNotFound/PageNotFound";
 import TimePicker from "src/components/TimePicker/TimePicker";
 import { getSchedule, updateSchedule } from "src/api";
@@ -162,6 +162,7 @@ const EditSchedules = ({ schedule, currentId }) => {
               <MenuItem value="">No services available</MenuItem>
             )}
           </Select>
+          <FormHelperText>{formik.touched.services && formik.errors.services}</FormHelperText>
         </FormControl>
 
         <Stack direction="row" spacing={2} alignItems="center" mb={2} mt={2}>

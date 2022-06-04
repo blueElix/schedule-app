@@ -10,7 +10,6 @@ import { toastMsg } from "src/helpers/toast";
 import { getBarangay, updateBarangay } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import Loader from "src/components/Loader/Loader";
-import StyleLink from "src/components/StyleLink/StyleLink";
 import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const EditBarangays = ({ barangay, currentId }) => {
@@ -24,7 +23,7 @@ const EditBarangays = ({ barangay, currentId }) => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Barangay name is required."),
-      address: Yup.string(),
+      address: Yup.string().required("Barangay address is required."),
     }),
     onSubmit: async (values) => {
       try {

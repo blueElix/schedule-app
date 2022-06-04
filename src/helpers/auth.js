@@ -1,7 +1,5 @@
 import cookie from "js-cookie";
 import Router from "next/router";
-// import axios from "axios";
-import { users } from "../__mocks__/users";
 import { getUserDetails } from "src/api";
 
 // set in cookie

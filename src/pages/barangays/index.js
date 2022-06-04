@@ -3,7 +3,6 @@ import { Container, Stack, Button } from "@mui/material";
 
 import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
-import { barangays as _barangays } from "src/__mocks__/barangays";
 import BarangaysTable from "src/components/BarangaysTable/BarangaysTable";
 import SearchForm from "src/components/SearchForm/SearchForm";
 import Loader from "src/components/Loader/Loader";

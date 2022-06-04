@@ -3,7 +3,6 @@ import { Container, Stack, Button } from "@mui/material";
 
 import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
-import { schedules as _schedules } from "src/__mocks__/schedules";
 import SchedulesTable from "src/components/SchedulesTable/SchedulesTable";
 import SearchForm from "src/components/SearchForm/SearchForm";
 import Loader from "src/components/Loader/Loader";

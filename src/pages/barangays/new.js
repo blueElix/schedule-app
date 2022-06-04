@@ -11,7 +11,6 @@ import useLocalStorage from "src/hooks/useLocalStorage";
 import { toastMsg } from "src/helpers/toast";
 import { withAdmin } from "../../helpers/auth";
 import { DashboardLayout } from "src/components/DashboadLayout";
-import StyleLink from "src/components/StyleLink/StyleLink";
 
 const CreateBarangays = () => {
   const [submitting, setSubmitting] = useState(false);
@@ -25,7 +24,7 @@ const CreateBarangays = () => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Barangay name is required."),
-      address: Yup.string(),
+      address: Yup.string().required("Barangay address is required."),
     }),
     onSubmit: async (values, { resetForm }) => {
       try {

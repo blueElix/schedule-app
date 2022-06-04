@@ -4,7 +4,6 @@ import Link from "next/link";
 import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import Loader from "src/components/Loader/Loader";
-import StyleLink from "src/components/StyleLink/StyleLink";
 import { getBarangay } from "src/api";
 import PageNotFound from "src/components/PageNotFound/PageNotFound";
 

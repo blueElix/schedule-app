@@ -3,7 +3,6 @@ import { Container, Stack, Button } from "@mui/material";
 
 import { DashboardLayout } from "../../components/DashboadLayout";
 import { withUser } from "../../helpers/auth";
-import { bookings as _bookings } from "src/__mocks__/bookings";
 import BookingsTable from "../../components/BookingsTable/BookingsTable";
 import BookingsTableView from "../../components/BookingsTableView/BookingsTableView";
 import SearchForm from "src/components/SearchForm/SearchForm";

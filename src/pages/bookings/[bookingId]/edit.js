@@ -19,7 +19,6 @@ import { DashboardLayout } from "src/components/DashboadLayout";
 import { withUser } from "../../../helpers/auth";
 import Loader from "src/components/Loader/Loader";
 import { toastMsg } from "src/helpers/toast";
-import StyleLink from "src/components/StyleLink/StyleLink";
 import PageNotFound from "src/components/PageNotFound/PageNotFound";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import useServices from "src/hooks/useServices";

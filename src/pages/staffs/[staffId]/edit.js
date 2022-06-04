@@ -24,8 +24,6 @@ import InputMask from "react-input-mask";
 
 import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
-import { users } from "src/__mocks__/users";
-import { services } from "src/__mocks__/services";
 import { toastMsg } from "src/helpers/toast";
 import Loader from "src/components/Loader/Loader";
 import StyleLink from "src/components/StyleLink/StyleLink";

@@ -21,7 +21,6 @@ import { DashboardLayout } from "src/components/DashboadLayout";
 import { withUser } from "../../helpers/auth";
 
 import { toastMsg } from "src/helpers/toast";
-import StyleLink from "src/components/StyleLink/StyleLink";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import useServices from "src/hooks/useServices";
 import useSchedules from "src/hooks/useSchedules";
@@ -204,9 +203,6 @@ const CreateBookings = () => {
                         ]
                   }
                 />
-                {/* {formik.errors && formik.errors.schedule && (
-                  <FormHelperText>{formik.errors.schedule}</FormHelperText>
-                )} */}
               </FormControl>
             </>
           )}
