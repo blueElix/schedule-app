@@ -18,8 +18,8 @@ const Login = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: "ecarlos.devacad@gmail.com",
-      password: "Password1!",
+      email: "",
+      password: "",
     },
     validationSchema: Yup.object({
       email: Yup.string().max(255).required("Email is required"),
@@ -54,7 +54,7 @@ const Login = () => {
   return (
     <>
       <Head>
-        <title>Login | Material Kit</title>
+        <title>Login | Schedule App</title>
       </Head>
       <Box
         component="main"

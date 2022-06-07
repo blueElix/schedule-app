@@ -119,12 +119,11 @@ const useBookings = () => {
   useEffect(() => {
     const run = async () => {
       try {
-        console.log("USER", user);
         if (user.user.role === "ADMIN") {
           initBookings();
-        } else if (user.user.type === "BARANGAY_STAFF") {
+        } else if (user.user.role === "BARANGAY") {
           initBarangayBookings();
-        } else if (user.user.type === "SERVICE_STAFF") {
+        } else if (user.user.role === "SERVICE") {
           initServicesBookings();
         }
       } catch (err) {
