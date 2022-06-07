@@ -7,7 +7,6 @@ import moment from "moment";
 import { DashboardLayout } from "src/components/DashboadLayout";
 import { withUser } from "../../../helpers/auth";
 import Loader from "src/components/Loader/Loader";
-import StyleLink from "src/components/StyleLink/StyleLink";
 import PageNotFound from "src/components/PageNotFound/PageNotFound";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import { getBooking } from "src/api";

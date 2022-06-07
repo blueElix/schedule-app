@@ -26,7 +26,6 @@ import { useRouter } from "next/router";
 import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 import { toastMsg } from "src/helpers/toast";
-import StyleLink from "src/components/StyleLink/StyleLink";
 import TimePicker from "src/components/TimePicker/TimePicker";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import useServices from "src/hooks/useServices";

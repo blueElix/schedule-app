@@ -17,7 +17,6 @@ import moment from "moment";
 import useSchedules from "src/hooks/useSchedules";
 import useModalState from "src/hooks/useModalState";
 import DeletingModal from "../Modal/DeletingModal";
-import StyleLink from "../StyleLink/StyleLink";
 import useServices from "src/hooks/useServices";
 import { deleteBooking } from "src/api";
 import { toastMsg } from "src/helpers/toast";

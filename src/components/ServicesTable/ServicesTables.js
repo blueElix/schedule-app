@@ -17,7 +17,6 @@ import DeletingModal from "../Modal/DeletingModal";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import { toastMsg } from "src/helpers/toast";
 import { deleteService } from "src/api";
-import StyleLink from "../StyleLink/StyleLink";
 
 const ServicesTable = ({ services, setServices }) => {
   const { show, handleClose, handleShow } = useModalState();

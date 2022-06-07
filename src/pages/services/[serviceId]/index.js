@@ -5,7 +5,6 @@ import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import { getService } from "src/api";
 import Loader from "src/components/Loader/Loader";
-import StyleLink from "src/components/StyleLink/StyleLink";
 import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const ServicesDetails = ({ service }) => {

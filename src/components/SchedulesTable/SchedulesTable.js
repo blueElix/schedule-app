@@ -16,7 +16,6 @@ import moment from "moment";
 
 import useModalState from "src/hooks/useModalState";
 import DeletingModal from "../Modal/DeletingModal";
-import StyleLink from "../StyleLink/StyleLink";
 import useServices from "src/hooks/useServices";
 import { deleteSchedule } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";

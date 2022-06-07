@@ -14,7 +14,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import useModalState from "src/hooks/useModalState";
 import DeletingModal from "../Modal/DeletingModal";
 import { useState } from "react";
-import StyleLink from "../StyleLink/StyleLink";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import { deleteStaff } from "src/api";
 import { toastMsg } from "src/helpers/toast";

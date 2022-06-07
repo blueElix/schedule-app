@@ -10,7 +10,6 @@ import { withAdmin } from "../../../helpers/auth";
 import { toastMsg } from "src/helpers/toast";
 import { getService, updateService } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";
-import StyleLink from "src/components/StyleLink/StyleLink";
 import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const EditServices = ({ service, currentId }) => {

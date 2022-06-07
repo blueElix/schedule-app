@@ -10,7 +10,6 @@ import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../helpers/auth";
 import { createService } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";
-import StyleLink from "src/components/StyleLink/StyleLink";
 
 const CreateServices = () => {
   const [submitting, setSubmitting] = useState(false);

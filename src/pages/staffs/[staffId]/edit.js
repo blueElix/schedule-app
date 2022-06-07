@@ -26,7 +26,6 @@ import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import { toastMsg } from "src/helpers/toast";
 import Loader from "src/components/Loader/Loader";
-import StyleLink from "src/components/StyleLink/StyleLink";
 import { updateStaff, getStaff, getBarangays, getServices } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";
 

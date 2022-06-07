@@ -13,7 +13,6 @@ import moment from "moment";
 
 import useSchedules from "src/hooks/useSchedules";
 import useServices from "src/hooks/useServices";
-import StyleLink from "../StyleLink/StyleLink";
 
 const BookingsTableView = ({ bookings }) => {
   const { services, filtersDispatch: serviceDispatch } = useServices();
