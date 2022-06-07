@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Box, Drawer, useMediaQuery } from "@mui/material";
+import { Box, Drawer, useMediaQuery, Stack } from "@mui/material";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import EventNoteIcon from "@mui/icons-material/EventNote";
@@ -98,16 +98,20 @@ export const DashboardSidebar = (props) => {
       >
         <div>
           <Box sx={{ p: 3 }}>
-            <Link href="/">
-              <a>
-                <Logo
-                  sx={{
-                    height: 42,
-                    width: 42,
-                  }}
-                />
-              </a>
-            </Link>
+            <Stack direction="row" alignItems="center" justifyContent="center" spacing={2}>
+              <img
+                src="/static/images/viber_logo_1.jpg"
+                style={{
+                  maxWidth: "80px",
+                }}
+              />
+              <img
+                src="/static/images/viber_logo_2.jpg"
+                style={{
+                  maxWidth: "80px",
+                }}
+              />
+            </Stack>
           </Box>
         </div>
         <Box sx={{ flexGrow: 1 }}>
