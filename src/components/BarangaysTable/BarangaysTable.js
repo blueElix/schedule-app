@@ -17,7 +17,6 @@ import DeletingModal from "../Modal/DeletingModal";
 import { deleteBarangay } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";
 import { toastMsg } from "src/helpers/toast";
-import StyleLink from "../StyleLink/StyleLink";
 
 const BarangaysTable = ({ barangays, setBarangays }) => {
   const { show, handleClose, handleShow } = useModalState();
