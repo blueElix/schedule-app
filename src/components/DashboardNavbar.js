@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
-import { AppBar, Avatar, Box, IconButton, Toolbar } from "@mui/material";
+import { AppBar, Avatar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { UserCircle as UserCircleIcon } from "../icons/user-circle";
+import useLocalStorage from "src/hooks/useLocalStorage";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -11,6 +12,7 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 
 export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
+  const [user] = useLocalStorage("user");
   return (
     <>
       <DashboardNavbarRoot
@@ -43,17 +45,14 @@ export const DashboardNavbar = (props) => {
           >
             <MenuIcon fontSize="small" />
           </IconButton>
-
           <Box sx={{ flexGrow: 1 }} />
-          <Avatar
-            sx={{
-              height: 40,
-              width: 40,
-              ml: 1,
-            }}
-          >
-            <UserCircleIcon fontSize="small" />
-          </Avatar>
+          <Typography variant="h5" component="h5" sx={{ color: "#121828" }}>
+            {user && user.user.type === "BARANGAY_STAFF"
+              ? "Barangay Staff"
+              : user && user.user.type === "SERVICE_STAFF"
+              ? "Services Staff"
+              : "Admin Staff"}
+          </Typography>
         </Toolbar>
       </DashboardNavbarRoot>
     </>
