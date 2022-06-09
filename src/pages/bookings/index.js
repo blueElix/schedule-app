@@ -31,6 +31,8 @@ const Bookings = (props) => {
     });
   };
 
+  console.log(user.user.role);
+
   return (
     <Container>
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center" mb={2}>
@@ -54,7 +56,7 @@ const Bookings = (props) => {
 
       {isLoading || !bookings ? (
         <Loader />
-      ) : user && user.user.role === "BARANGAY_STAFF" ? (
+      ) : user && user.user.type === "BARANGAY_STAFF" ? (
         <BookingsTable bookings={bookings} setBookings={setBookings} />
       ) : (
         <BookingsTableView bookings={bookings} />
