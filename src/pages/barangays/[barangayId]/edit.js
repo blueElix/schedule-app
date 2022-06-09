@@ -41,7 +41,11 @@ const EditBarangays = ({ barangay, currentId }) => {
           }, 300);
         }
       } catch (error) {
-        toastMsg("error", "Something went wrong.");
+        if (error.response.data.message) {
+          toastMsg("error", error.response.data.message);
+        } else {
+          toastMsg("error", "Something went wrong.");
+        }
       }
     },
   });

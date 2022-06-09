@@ -37,14 +37,17 @@ const ChangePassword = (props) => {
             "Content-Type": "application/json",
           },
         });
-        console.log(res);
         if (res) {
           toastMsg("success", "Successfully update your password.");
         }
 
         resetForm();
       } catch (error) {
-        toastMsg("error", "Something went wrong please contact your admin.");
+        if (error.response.data.message) {
+          toastMsg("error", error.response.data.message);
+        } else {
+          toastMsg("error", "Something went wrong.");
+        }
       }
     },
   });

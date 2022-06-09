@@ -5,8 +5,15 @@ import { DashboardLayout } from "src/components/DashboadLayout";
 import { withAdmin } from "../../../helpers/auth";
 import Loader from "src/components/Loader/Loader";
 import { getStaff } from "src/api";
+import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const StaffsDetails = ({ staff }) => {
+  if (!staff) {
+    return (
+      <PageNotFound title="Staffs not found" linkLabel="Go back to Staffs List" link="/staffs" />
+    );
+  }
+
   return (
     <Container>
       <h1>Details</h1>

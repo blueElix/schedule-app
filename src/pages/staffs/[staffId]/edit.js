@@ -6,12 +6,7 @@ import {
   Box,
   Button,
   TextField,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
   FormControl,
-  FormLabel,
-  FormHelperText,
   Select,
   MenuItem,
   InputLabel,
@@ -28,6 +23,7 @@ import { toastMsg } from "src/helpers/toast";
 import Loader from "src/components/Loader/Loader";
 import { updateStaff, getStaff, getBarangays, getServices } from "src/api";
 import useLocalStorage from "src/hooks/useLocalStorage";
+import PageNotFound from "src/components/PageNotFound/PageNotFound";
 
 const EditStaffs = ({ staff, currentId, barangays, services }) => {
   const [submitting, setSubmitting] = useState(false);
@@ -64,10 +60,16 @@ const EditStaffs = ({ staff, currentId, barangays, services }) => {
           },
         });
 
-        setSubmitting(true);
-        toastMsg("success", "Successfully updated staff.");
+        setTimeout(() => {
+          setSubmitting(false);
+          toastMsg("success", "Successfully updated staff.");
+        }, 300);
       } catch (error) {
-        toastMsg("error", "Something went wrong.");
+        if (error.response.data.message) {
+          toastMsg("error", error.response.data.message);
+        } else {
+          toastMsg("error", "Something went wrong.");
+        }
       }
     },
   });
@@ -173,6 +175,13 @@ const EditStaffs = ({ staff, currentId, barangays, services }) => {
       </form>
     );
   };
+
+  if (!staff) {
+    return (
+      <PageNotFound title="Staffs not found" linkLabel="Go back to Staffs List" link="/staffs" />
+    );
+  }
+
   return (
     <Container>
       <h1>Edit Staff</h1>
