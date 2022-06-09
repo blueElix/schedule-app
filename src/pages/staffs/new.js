@@ -97,6 +97,8 @@ const CreateStaffs = ({ barangays, services }) => {
           toastMsg("success", "Successfully created staff.");
         }, 300);
       } catch (error) {
+        setSubmitting(false);
+
         if (error.response.data.message) {
           toastMsg("error", error.response.data.message);
         } else {

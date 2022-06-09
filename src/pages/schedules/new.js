@@ -82,6 +82,8 @@ const CreateSchedules = () => {
           toastMsg("success", "Successfully created schedule.");
         }, 300);
       } catch (error) {
+        setSubmitting(false);
+
         if (error.response.data.message) {
           toastMsg("error", error.response.data.message);
         } else {

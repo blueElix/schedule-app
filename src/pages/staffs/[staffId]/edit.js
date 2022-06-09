@@ -65,6 +65,8 @@ const EditStaffs = ({ staff, currentId, barangays, services }) => {
           toastMsg("success", "Successfully updated staff.");
         }, 300);
       } catch (error) {
+        setSubmitting(false);
+
         if (error.response.data.message) {
           toastMsg("error", error.response.data.message);
         } else {
