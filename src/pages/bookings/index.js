@@ -31,8 +31,6 @@ const Bookings = (props) => {
     });
   };
 
-  console.log(user.user.role);
-
   return (
     <Container>
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center" mb={2}>
