@@ -107,7 +107,7 @@ export const withAdmin = (gssp) => {
       }
     }
 
-    if (user === null || (user.role !== "SUPERADMIN" && user.role !== "ADMIN")) {
+    if (user === null || user.role !== "ADMIN") {
       // redirect
 
       if (typeof window === "undefined") {

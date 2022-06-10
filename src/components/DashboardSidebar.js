@@ -70,11 +70,11 @@ const servicesLinks = [
     icon: <MenuBookIcon fontSize="small" />,
     title: "Bookings",
   },
-  {
-    href: "/services-schedules",
-    icon: <EventNoteIcon fontSize="small" />,
-    title: "Services Schedules",
-  },
+  // {
+  //   href: "/services-schedules",
+  //   icon: <EventNoteIcon fontSize="small" />,
+  //   title: "Services Schedules",
+  // },
   {
     href: "/account",
     icon: <AccountCircleIcon fontSize="small" />,

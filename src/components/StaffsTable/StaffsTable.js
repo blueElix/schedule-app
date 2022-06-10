@@ -92,8 +92,8 @@ const StaffsTable = ({ staffs, setStaffs }) => {
                   {staff.type === "BARANGAY_STAFF"
                     ? "Barangay Staff"
                     : staff.type === "SERVICE_STAFF"
-                    ? "Services Staff"
-                    : "Staff"}
+                    ? "Service Staff"
+                    : "Admin Staff"}
                 </TableCell>
                 <TableCell width="150px">
                   <IconButton

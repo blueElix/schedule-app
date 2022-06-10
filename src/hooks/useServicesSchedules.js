@@ -19,7 +19,6 @@ const useServicesSchedules = () => {
           },
         });
         const data = result.data;
-        console.log(data);
         setTimeout(() => {
           setSchedules(data.data);
           setIsLoading(false);

@@ -32,20 +32,11 @@ const EditStaffs = ({ staff, currentId, barangays, services }) => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      email: "",
       contact: "",
-      type: "",
-      role: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Staff name is required."),
       contact: Yup.string(),
-      email: Yup.string()
-        .email("Must be a valid email")
-        .max(255)
-        .required("Staff email is required"),
-      type: Yup.string().required("Staff type is required."),
-      role: Yup.string(),
     }),
     onSubmit: async (values) => {
       try {
@@ -53,6 +44,7 @@ const EditStaffs = ({ staff, currentId, barangays, services }) => {
           fullName: values.name,
           contact: values.contact,
         };
+        console;
         const res = await updateStaff(currentId, payload, {
           headers: {
             Authorization: `Bearer ${user.accessToken}`,
