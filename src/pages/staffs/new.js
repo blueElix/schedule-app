@@ -148,7 +148,7 @@ const CreateStaffs = ({ barangays, services }) => {
           >
             <FormControlLabel value="SERVICE_STAFF" control={<Radio />} label="Service Staff" />
             <FormControlLabel value="BARANGAY_STAFF" control={<Radio />} label="Barangay Staff" />
-            <FormControlLabel value="ADMIN" control={<Radio />} label="Staff" />
+            <FormControlLabel value="ADMIN" control={<Radio />} label="Admin Staff" />
           </RadioGroup>
           <FormHelperText>{formik.touched.type && formik.errors.type}</FormHelperText>
         </FormControl>

@@ -50,7 +50,7 @@ export const DashboardNavbar = (props) => {
             {user && user.user.type === "BARANGAY_STAFF"
               ? "Barangay Staff"
               : user && user.user.type === "SERVICE_STAFF"
-              ? "Services Staff"
+              ? "Service Staff"
               : "Admin Staff"}
           </Typography>
         </Toolbar>

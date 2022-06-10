@@ -52,7 +52,7 @@ export const Summary = (props) => {
     <Container>
       <Grid container spacing={2}>
         {summary.map((summ) => (
-          <Grid item xs={6} md={6}>
+          <Grid item xs={6} md={6} key={summ.slug}>
             <Card sx={{ height: "100%" }} {...props}>
               <CardContent>
                 <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>

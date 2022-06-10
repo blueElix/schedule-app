@@ -64,6 +64,24 @@ const staffLinks = [
   },
 ];
 
+const servicesLinks = [
+  {
+    href: "/bookings",
+    icon: <MenuBookIcon fontSize="small" />,
+    title: "Bookings",
+  },
+  {
+    href: "/services-schedules",
+    icon: <EventNoteIcon fontSize="small" />,
+    title: "Services Schedules",
+  },
+  {
+    href: "/account",
+    icon: <AccountCircleIcon fontSize="small" />,
+    title: "Profile",
+  },
+];
+
 export const DashboardSidebar = (props) => {
   const { open, onClose } = props;
   const router = useRouter();
@@ -100,13 +118,13 @@ export const DashboardSidebar = (props) => {
           <Box sx={{ p: 3 }}>
             <Stack direction="row" alignItems="center" justifyContent="center" spacing={2}>
               <img
-                src="/static/images/viber_logo_1.jpg"
+                src="/static/images/viber_logo1.png"
                 style={{
                   maxWidth: "80px",
                 }}
               />
               <img
-                src="/static/images/viber_logo_2.jpg"
+                src="/static/images/viber_logo2.png"
                 style={{
                   maxWidth: "80px",
                 }}
@@ -116,15 +134,22 @@ export const DashboardSidebar = (props) => {
         </div>
         <Box sx={{ flexGrow: 1 }}>
           {user &&
-            (user.user.role === "SUPERADMIN" || user.user.role === "ADMIN") &&
+            user.user.role === "ADMIN" &&
             adminLinks.map((item) => (
               <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
             ))}
 
           {user &&
-            (user.user.role === "BARANGAY" || user.user.role === "SERVICE") &&
-            (user.user.type === "BARANGAY_STAFF" || user.user.type === "SERVICE_STAFF") &&
+            user.user.role === "BARANGAY" &&
+            user.user.type === "BARANGAY_STAFF" &&
             staffLinks.map((item) => (
+              <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
+            ))}
+
+          {user &&
+            user.user.role === "SERVICE" &&
+            user.user.type === "SERVICE_STAFF" &&
+            servicesLinks.map((item) => (
               <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
             ))}
           <NavItem

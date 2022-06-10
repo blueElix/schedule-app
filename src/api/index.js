@@ -129,3 +129,6 @@ export const updateBooking = (bookingId, bookingPayload, header) =>
 
 export const deleteBooking = (bookingId, header) =>
   axios.delete(`${API}/barangays/bookings/${bookingId}`, header);
+
+export const getServicesSchedules = (staffId, header) =>
+  axios.get(`${API}/services/${staffId}/schedules`, header);
